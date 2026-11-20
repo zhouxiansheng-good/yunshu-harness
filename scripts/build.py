@@ -1,9 +1,10 @@
-"""Build a complete R39 public Windows ZIP. Requires Python 3.11+."""
+"""Build the complete R40 Windows ZIP. Requires Python 3.11+ and Node.js 20+."""
 import argparse
 import gzip
 import hashlib
 import json
 import shutil
+import subprocess
 import tarfile
 import tempfile
 import urllib.request
@@ -66,11 +67,17 @@ def bundle(folder, output):
         staged.unlink(missing_ok=True)
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=ROOT/'dist/Yunshu-R39-Windows-x64.zip')
+    parser.add_argument('--output', type=Path, default=ROOT/'dist/Yunshu-R40-Windows-x64.zip')
     parser.add_argument('--cache', type=Path, default=ROOT/'.build-cache')
     parser.add_argument('--bge-model', type=Path, help='Optional verified local model_int8.onnx')
     parser.add_argument('--speech-models', type=Path, help='Optional model directory containing silero and sensevoice-onnx')
+    parser.add_argument('--background-music', type=Path, help='Personal build only: local MP3 soundtrack')
+    parser.add_argument('--music-title', help='Display title for the personal soundtrack')
     args = parser.parse_args()
+    if bool(args.background_music) != bool(args.music_title):
+        parser.error('--background-music and --music-title must be provided together')
+    if args.background_music and (args.background_music.suffix.lower() != '.mp3' or not args.background_music.is_file()):
+        parser.error('The personal soundtrack must be a local MP3')
     args.cache.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=args.cache) as temp:
         stage = Path(temp)
@@ -82,12 +89,27 @@ def main():
             shutil.copyfile(ROOT/name, stage/name)
         shutil.copyfile(ROOT/'README.md', stage/'README.md')
         packages = []
+        if args.background_music:
+            readme = stage/'README.md'
+            readme.write_text(readme.read_text('utf8').replace('云舒的原创配乐《湖畔夜曲》', '个人配乐《' + args.music_title + '》'), 'utf8')
         for kind in ['desktop', 'united']:
             package_dir = ROOT/'packages'/kind
             package = read(package_dir/'package.json')
             tgz = stage/('yunshu-dsh-' + kind + '-' + package['version'] + '.tgz')
             extras = {r['path']: acquire(r, args.bge_model, args.cache) for r in read(ROOT/'vendor.lock.json') if r['package'] == kind}
+            if kind == 'desktop' and args.background_music:
+                client = (package_dir/'client.js').read_text('utf8')
+                before = "' · 湖畔夜曲 · 云舒'"
+                if client.count(before) != 1:
+                    raise ValueError('Cannot locate the soundtrack title')
+                personal_client = stage/'personal-client.js'
+                personal_client.write_text(client.replace(before, json.dumps(' · ' + args.music_title, ensure_ascii=False)), 'utf8')
+                extras.update({'client.js': personal_client, 'components/avalon/media/lake-nocturne.mp3': args.background_music})
+            client_entry = extras.get('client.js', package_dir/'client.js')
+            subprocess.run(['node', str(ROOT/'scripts/check-client.cjs'), str(client_entry), package['name']], check=True)
             pack(package_dir, tgz, extras)
+            if kind == 'desktop' and args.background_music:
+                personal_client.unlink()
             packages.append(dict(name=package['name'], version=package['version'], file=tgz.name, sha256=sha(tgz), bytes=tgz.stat().st_size))
         speech = read(ROOT/'speech.lock.json')
         for row in speech:
@@ -96,10 +118,9 @@ def main():
             dest = stage/'models'/row['path']
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(f, dest)
-        manifest = dict(version='r39-public', hostVersion='0.2.2-rc.1', packages=packages, speech=speech)
+        manifest = dict(version='r40-personal' if args.background_music else 'r40-public', hostVersion='0.2.2-rc.1', packages=packages, speech=speech)
         (stage/'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n','utf8')
         bundle(stage, args.output)
     print(args.output, sha(args.output), flush=True)
 if __name__ == '__main__':
     main()
-

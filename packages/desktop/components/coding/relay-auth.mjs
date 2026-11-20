@@ -47,7 +47,8 @@ export function probeRelay(codexHome) {
   let provider;
   try { provider = selectedProvider(readFileSync(join(codexHome, 'config.toml'), 'utf8')); }
   catch { return { ready: false, reason: 'relay-config-unavailable' }; }
-  if (typeof provider.name !== 'string' || !provider.name || provider.name === 'openai' || !provider.config)
+  if (!provider.name || provider.name === 'openai') return { ready: false, reason: 'official-provider' };
+  if (typeof provider.name !== 'string' || !provider.config)
     return { ready: false, reason: 'relay-provider-not-configured' };
   const config = provider.config;
   if (config.requires_openai_auth !== false)

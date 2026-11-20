@@ -1,6 +1,7 @@
 import { featureTool } from '../../system/policy.mjs';
 import { defineTool } from '@deepseek-ai/dsh-tools';
 import { CodingCoordinator } from '../coordinator.mjs';
+import { installRoleTransport } from '../role-transport.mjs';
 import { projectReviewTool } from '../project-review.mjs';
 
 const output = {
@@ -9,10 +10,16 @@ const output = {
 };
 
 export default class YunshuCodingTools {
-  static inject = ['tools'];
+  static inject = ['tools','yunshuControl'];
 
   constructor(ctx, config = {}) {
     this.coordinator = new CodingCoordinator(config);
+    const control = ctx.get('yunshuControl');
+    const transport = installRoleTransport(ctx,this.coordinator);
+    const workers={...transport,explain:e=>control.explain(e),run:(agent,stage,task,signal)=>
+      control.directory.observe(stage==='execute'?'codex':'claude',()=>transport.run(agent,stage,task,signal))};
+    control.taskWorkers = workers;
+    ctx.effect(()=>()=>{ if (control.taskWorkers===workers) control.taskWorkers=null; });
     featureTool(ctx,defineTool({
       name: 'yunshu_code_status',
       description: 'Read Codex and Claude Code relay readiness or an existing coding ticket. Static local configuration only; ready does not prove a real request succeeded. No network or model call. For status-only requests, report this result and finish instead of scanning configs or running CLIs. Probe is on unless explicitly false. Ticket recovery is observation-only, not automatic diagnosis or a fresh-context runner; unresolved checks require reconciliation.',

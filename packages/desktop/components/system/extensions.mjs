@@ -35,15 +35,18 @@ async function receipt(result,cwd,signal) {
 
 export class ExtensionRegistry {
   entries=new Map();
+  constructor(observe=(_id,fn)=>fn(),permits=()=>true) {this.observe=observe;this.permits=permits;this.listeners=new Set();}
+  refresh(){for(const notify of this.listeners)notify();}
   list(){return [...this.entries.values()].map(x=>({...x,active:this.active(x)}));}
-  active(x){return enabled(x.group) && preferences()['ext.'+x.id]!==false;}
+  active(x){return enabled(x.group) && preferences()['ext.'+x.id]!==false && this.permits(x);}
   register(owner,spec) {
     if (!owner?.tools?.register||!owner?.effect||!idPattern.test(spec?.id)||!toolPattern.test(spec.tool)||
         !Object.hasOwn(labels,spec.group)||spec.group==='master'||typeof spec.label!=='string'||!spec.label.trim()||
         spec.label.length>48||typeof spec.description!=='string'||!spec.description.trim()||spec.description.length>400||
         !spec.parameters||typeof spec.run!=='function')throw Error('扩展注册信息不完整。');
     if(this.entries.has(spec.id)||this.list().some(x=>x.tool===spec.tool))throw Error('扩展或工具名已经注册。');
-    const entry={id:spec.id,label:spec.label,group:spec.group,description:spec.description,tool:spec.tool,tools:[spec.tool]};
+    const entry={id:spec.id,label:spec.label,group:spec.group,description:spec.description,tool:spec.tool,tools:[spec.tool],
+      moduleId:idPattern.test(spec.moduleId??'')?spec.moduleId:null};
     const calls=new Set();
     const canRun=()=>this.entries.get(entry.id)===entry && this.active(entry);
     const invoke=async(args,exec)=>{
@@ -58,12 +61,15 @@ export class ExtensionRegistry {
         return {capability:entry.id,...await receipt(value,session.header.cwd,signal)};
       } finally {calls.delete(abort);}
     };
-    const definition=defineTool({name:entry.tool,description:entry.description,parameters:spec.parameters,output,execute:invoke});
+    const definition=defineTool({name:entry.tool,description:entry.description,parameters:spec.parameters,output,
+      execute:(args,exec)=>this.observe(entry.id,()=>invoke(args,exec))});
     const unregister=owner.tools.register(definition,{when:canRun});
     this.entries.set(entry.id,entry);
     const stop=()=>{for(const c of calls)c.abort();};
-    const off=onChange(owner,()=>{if(!canRun())stop();});
-    const dispose=()=>{if(this.entries.get(entry.id)===entry){this.entries.delete(entry.id);stop();off();unregister();}};
+    const check=()=>{if(!canRun())stop();};
+    this.listeners.add(check);
+    const off=onChange(owner,check);
+    const dispose=()=>{if(this.entries.get(entry.id)===entry){this.entries.delete(entry.id);this.listeners.delete(check);stop();off();unregister();}};
     owner.effect(()=>dispose);return dispose;
   }
 }

@@ -885,7 +885,7 @@ export function apply(ctx, config = {}) {
 }
 
 export default class YunshuUnited extends TypertRemoteService {
-  static inject = ['typert','sessionProjections','sessionQuery','sessionController']
+  static inject = ['typert','sessionProjections','sessionQuery']
 
   constructor(ctx, config = {}) {
     super(ctx, 'yunshuUnited')
@@ -929,19 +929,32 @@ export default class YunshuUnited extends TypertRemoteService {
     } catch {}
   }
 
+  coordinating(agent) { return this.chatPlans.ownsTurn(agent.session); }
+  async planFromChat(agent,payload,signal) {
+    return this.chatPlans.fromChat(this.engine(),agent,payload,signal);
+  }
+  async routeFromChat(agent,payload,signal) {
+    this.chatPlans.claimTurn(agent.session);
+    return (await this.sessionTasks).route(this.engine(),agent,payload,signal);
+  }
   async request(agent, action, payload = {}, signal) {
     signal?.throwIfAborted?.()
 
     if(this.ctx.get('yunshuControl')?.enabled('tasks')===false) throw Error('任务台已关闭，可在功能开关中启用。');
+    if (action==='channels' || action==='channel-edit') {
+      const control=this.ctx.get('yunshuControl');
+      if (!control?.directory) throw Error('云舒能力目录未连接。');
+      if (action==='channel-edit') control.editDirectory(payload,signal);
+      return control.directory.snapshot(agent,control,payload.refresh===true);
+    }
     if (action === 'engine') {
       const e = this.engine()
       return { engineDir: e, ok: Boolean(e) }
     }
 
-    if (['board','task-action','session-task','chat-plan'].includes(action) && this.config.sharedTickets !== true) {
+    if (['board','task-action','session-task'].includes(action) && this.config.sharedTickets !== true) {
       const service = await this.sessionTasks;
       const engine = this.engine();
-      if (action==='chat-plan') return this.chatPlans.fromChat(engine,agent,payload,signal);
       if (action==='session-task' && payload.action==='create' && payload.draftId) return this.chatPlans.createEdited(engine,agent,payload,signal);
       if (action === 'session-task') return service.action(engine,agent,payload.action,payload,signal);
       const selected = service.scope(engine,agent.session);

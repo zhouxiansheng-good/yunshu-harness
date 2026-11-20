@@ -1,10 +1,10 @@
 # 云舒 · DeepSeek Harness
 
-云舒把长期记忆和任务派单接到 DeepSeek Harness 的主聊天。你可以先和 DeepSeek 商量目标，确定验收标准，再让它派单。打开任务台，就能看到这次派单写了什么、交给谁、有没有交回结果。
+云舒把长期记忆和任务派单接到 DeepSeek Harness 的主聊天。你可以先和 DeepSeek 商量目标，确定验收标准，再让它派单。R40 的工单由 DeepSeek 建立并派发，Claude Code 规划，GPT 经 Codex 执行，再由独立的 Claude Code 会话审核。审核退回时，DeepSeek 带上原标准和整改意见重开关联工单。通过后，DeepSeek 在主聊天交付结果。
 
-**[下载 Windows x64 完整安装包](https://github.com/zhouxiansheng-good/yunshu-harness/releases/download/r39/Yunshu-R39-Windows-x64.zip)** · [版本和校验值](https://github.com/zhouxiansheng-good/yunshu-harness/releases/tag/r39)
+[下载最新公开安装包和校验值](https://github.com/zhouxiansheng-good/yunshu-harness/releases/latest)
 
-## 安装 R39
+## 安装
 
 1. 在 Windows x64 上安装并至少打开一次 DeepSeek Harness。此版已验证的宿主 CLI 版本为 `0.2.2-rc.1`。
 2. 完整退出 Harness，将下载的 ZIP 解压到普通文件夹。
@@ -21,7 +21,10 @@
 | 查看或修订记忆 | 打开「记忆」查看事实和存档位置。自动记忆默认开启，模块开关可以调整。 |
 | 调整协作方式 | 在「人格」里编辑个人规则、标准和情感回应。 |
 | 使用语音与音乐 | 使用云舒右上角的麦克风、耳机和音乐按钮。「语音」里可配置识别和朗读方式。 |
-| 接入其他能力 | 桌面插件登记能力和开关，联合体处理任务、派单和回执。外部适配器需报告可用状态及交付凭证。 |
+| 查看渠道 | 展开任务台的「能力与渠道」，查看协作成员、职责、可用数量和故障处理办法。仅完成配置的渠道显示「待验证」。 |
+| 添加模块 | 选择「新建模块」，填写用途，然后添加渠道并绑定已安装的扩展。图像生成和视频生成已预留模块。 |
+
+已安装的适配器使用 `yunshuControl.registerCapability` 登记渠道标识、工具参数及执行函数。适配器可用 `moduleId` 指定 `image`、`video`、`agents` 或自定义模块。任务台可重新绑定所属模块。Claude 规划需要的渠道，GPT 提交工具参数，云舒核对返回文件的路径和摘要，再交给 Claude 审核。
 
 ## 仓库结构
 
@@ -32,13 +35,12 @@
 
 ## 从源码构建
 
-使用 Python 3.11 或以上版本。在仓库根目录运行下列命令。脚本从固定的上游版本获取 BGE 和 SenseVoice 模型，逐项比对 SHA-256，可在后续构建中复用缓存。
+构建需要 Python 3.11+ 和 Node.js 20+。在仓库根目录运行下列命令。脚本按 Harness 的桌面加载方式检查两个插件的前端入口，从固定的上游版本获取 BGE 和 SenseVoice 模型，并逐项比对 SHA-256。模型可在后续构建中复用。
 
 ```powershell
 python scripts/build.py
 ```
 
-生成文件为 `dist/Yunshu-R39-Windows-x64.zip`。已有模型时可传 `--bge-model` 和 `--speech-models` 进行离线构建。使用 `Install-Yunshu.ps1 -Action Check` 可在安装前验证宿主、两个插件包和语音模型。卸载使用 `Install-Yunshu.ps1 -Action Remove`，卸载后可继续使用原有 Harness 会话。
+生成文件为 `dist/Yunshu-R40-Windows-x64.zip`。已有模型时可传 `--bge-model` 和 `--speech-models` 进行离线构建。使用 `Install-Yunshu.ps1 -Action Check` 可在安装前验证宿主、两个插件包和语音模型。卸载使用 `Install-Yunshu.ps1 -Action Remove`，卸载后可继续使用原有 Harness 会话。
 
 云舒自有代码以 MIT 许可证开放。模型、语音工具及其他第三方组件的来源和许可见 [第三方说明](THIRD_PARTY_NOTICES.md)。
-

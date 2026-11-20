@@ -30,6 +30,18 @@
 .ysu-wrap button.ysu-chip[data-health="late"]{border-color:var(--dsw-alias-state-error-primary,#9a4a4e)}
 .ysu-wrap button.ysu-chip svg{width:14px;height:14px;flex:0 0 auto;opacity:.85}
 .ysu-wrap .ysu-chip-dot{width:6px;height:6px;border-radius:50%;background:var(--dsw-alias-state-idle-primary,#888);flex:0 0 auto}
+.ysu-directory{margin:0 0 12px;padding-block:4px 10px;border-bottom:1px solid var(--dsw-alias-border-l2,#454545);font:inherit}
+.ysu-directory .ysu-directory-heading{display:flex;align-items:center;gap:12px;width:100%;background:transparent;color:inherit;border:0;text-align:start;padding:8px 0;cursor:pointer}
+.ysu-directory-heading span:last-child{margin-inline-start:auto}
+.ysu-directory small,.ysu-directory-heading span,.ysu-directory-channel>div+div{color:var(--dsw-alias-label-secondary,#aaa)}
+.ysu-directory-group,.ysu-directory-form{display:grid;gap:6px;margin-block:12px}
+.ysu-directory-line{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.ysu-directory-channel{display:grid;gap:3px;padding:8px 0;border-bottom:1px solid var(--dsw-alias-border-l2,#454545)}
+.ysu-directory-channel button{justify-self:start}
+.ysu-directory-field{display:grid;gap:4px}
+.ysu-directory-field :is(input,select){width:100%;max-width:34rem}
+.ysu-directory-channel [data-state="available"]{color:var(--dsw-alias-state-success-primary,#83b596)}
+.ysu-directory-channel [data-state="unavailable"]{color:var(--dsw-alias-state-warn-primary,#c2a071)}
 .ysu-wrap .ysu-chip-dot[data-s="ok"]{background:var(--dsw-alias-state-success-primary,#2e6b53)}
 .ysu-wrap .ysu-chip-dot[data-s="warn"]{background:var(--dsw-alias-state-warn-primary,#805e29)}
 .ysu-wrap .ysu-chip-dot[data-s="late"]{background:var(--dsw-alias-state-error-primary,#9a4a4e)}
@@ -110,6 +122,89 @@
 .ysu-activity li{padding:4px 0}.ysu-activity small{display:block;font-size:11px;opacity:.75;white-space:pre-wrap}
 `
 
+  // Harness loads this entire entry as a classic script. Keep its components in this scope.
+  const channelStateLabels={available:'可用',busy:'工作中',unverified:'待验证',unavailable:'不可用',disabled:'已关闭'};
+  function clientMessage(err){
+    const raw=String(err?.message??err??'');
+    if(/insufficient.quota|billing|credit.balance|余额不足/iu.test(raw))return '服务账户额度不足，请检查余额或配额。';
+    if(/\b429\b|rate.limit/iu.test(raw))return '服务正在限制请求频率，请稍后刷新。';
+    if(/\b501\b|not implemented/iu.test(raw))return '当前接口不支持此功能，请检查渠道配置。';
+    if(/\b40[13]\b|unauthori[sz]ed|forbidden/iu.test(raw))return '登录已失效或没有访问权限，请核对账户。';
+    if(/\b5\d\d\b|failed to fetch|transport failure|ECONN/iu.test(raw))return '暂时连不上服务，请检查连接后刷新。';
+    return /[\u3400-\u9fff]/u.test(raw)?raw.slice(0,220):'暂时读取失败，请刷新后再试。';
+  }
+  function channelCounts(c){
+    return [c.total+' 个',...Object.keys(channelStateLabels).filter(k=>c[k]>0).map(k=>c[k]+' '+channelStateLabels[k])].join(' · ');
+  }
+  function TaskDirectory({React,sessionId,call}){
+    const h=React.createElement;
+    const [data,setData]=React.useState(null),[open,setOpen]=React.useState(false);
+    const [draft,setDraft]=React.useState(null),[busy,setBusy]=React.useState(false),[error,setError]=React.useState('');
+    const version=React.useRef(0),pending=React.useRef(false);
+    const read=async(refresh=false)=>{
+      const n=++version.current;
+      try{const value=await call(sessionId,'channels',{refresh});if(n===version.current){setData(value);setError('');}}
+      catch(e){if(n===version.current)setError(clientMessage(e));}
+    };
+    React.useEffect(()=>{
+      setData(null);setDraft(null);setError('');void read();
+      return ()=>{version.current++;};
+    },[sessionId]);
+    React.useEffect(()=>{
+      const timer=setInterval(()=>{if(!pending.current)void read();},open?10000:30000);
+      return ()=>clearInterval(timer);
+    },[sessionId,open]);
+    async function save(payload){
+      if(pending.current || (!draft && payload.action!=='switch'))return;
+      pending.current=true;setBusy(true);setError('');++version.current;
+      try{
+        const result=await call(sessionId,'channel-edit',{...payload,revision:draft?.revision??data.revision,requestId:draft?.requestId??crypto.randomUUID()});
+        ++version.current;setData(result);setDraft(null);
+      }catch(e){setError(clientMessage(e));}
+      finally{pending.current=false;setBusy(false);}
+    }
+    const start=(kind,value={})=>{setDraft({kind,name:'',purpose:'',binding:'',moduleId:'image',...value,
+      revision:data.revision,requestId:crypto.randomUUID()});setError('');};
+    const change=(key,value)=>setDraft(x=>({...x,[key]:value,requestId:crypto.randomUUID()}));
+    const button=(label,fn)=>h('button',{type:'button',disabled:busy,onClick:fn},label);
+    const field=(label,node)=>h('label',{className:'ysu-directory-field'},label,node);
+    const agents=data?.modules.find(m=>m.id==='agents');
+    const head=agents?'协作成员 '+channelCounts(agents.counts):'正在读取协作成员';
+    const form=draft&&h('form',{className:'ysu-directory-form',onSubmit:e=>{
+      e.preventDefault();const {kind,requestId,revision,...v}=draft;void save({action:kind,...v});
+    }},
+      h('strong',null,(draft.id?'编辑':'新增')+(draft.kind==='module'?'模块':'渠道')),
+      field('名称',h('input',{required:true,maxLength:draft.kind==='module'?40:48,value:draft.name,onChange:e=>change('name',e.target.value)})),
+      field(draft.kind==='module'?'用途':'负责内容',h('input',{required:true,maxLength:250,value:draft.purpose,onChange:e=>change('purpose',e.target.value)})),
+      draft.kind==='channel'&&h(React.Fragment,null,
+        field('所属模块',h('select',{value:draft.moduleId,onChange:e=>change('moduleId',e.target.value)},
+          ...data.modules.filter(m=>m.id!=='extensions').map(m=>h('option',{key:m.id,value:m.id},m.name)))),
+        field('已安装的接口',h('select',{value:data.bindings.some(x=>x.id===draft.binding)?draft.binding:'',onChange:e=>change('binding',e.target.value)},
+          h('option',{value:''},'待接入'),...data.bindings.map(x=>h('option',{key:x.id,value:x.id},x.name+' · '+x.id)))),
+        !data.bindings.some(x=>x.id===draft.binding)&&field('扩展标识（可稍后填写）',h('input',{value:draft.binding||'',maxLength:81,placeholder:'例如 studio.images',onChange:e=>change('binding',e.target.value)}))),
+      h('div',{className:'sr-actions'},h('button',{type:'submit',disabled:busy},'保存'),button('取消',()=>setDraft(null)),
+        draft.id&&button('移除'+(draft.kind==='module'?'模块':'渠道'),()=>void save({action:'remove-'+draft.kind,id:draft.id}))));
+    return h('section',{className:'ysu-directory'},
+      h('button',{className:'ysu-directory-heading',type:'button','aria-expanded':open,onClick:()=>{setOpen(!open);if(!open)void read();}},
+        h('strong',null,'能力与渠道'),h('span',null,head),h('span',{'aria-hidden':true},open?'⌃':'⌄')),
+      open&&data&&h(React.Fragment,null,
+        ...data.modules.map(m=>h('section',{key:m.id,className:'ysu-directory-group'},
+          h('div',{className:'ysu-directory-line'},h('strong',null,m.name),h('small',null,channelCounts(m.counts))),
+          m.custom&&h('p',null,m.purpose),
+          ...m.channels.map(ch=>h('div',{className:'ysu-directory-channel',key:ch.id},
+            h('div',{className:'ysu-directory-line'},h('b',null,ch.name),h('span',{'data-state':ch.state},ch.label)),
+            h('div',null,ch.purpose),h('small',null,[ch.reason,ch.action].filter(Boolean).join(' ')),
+            ch.lastObservedAt&&h('small',null,'最近调用　'+new Date(ch.lastObservedAt).toLocaleString()),
+            h('div',{className:'sr-actions'},ch.tool&&button(ch.enabled?'关闭渠道':'开启渠道',()=>void save({action:'switch',id:'ext.'+ch.binding,value:!ch.enabled})),
+              ch.manual&&button('编辑渠道',()=>start('channel',{id:ch.id,name:ch.name,purpose:ch.purpose,moduleId:m.id,binding:ch.binding||''}))))),
+          !m.channels.length&&h('small',null,'尚未接入渠道。'),
+          h('div',{className:'sr-actions'},m.id!=='extensions'&&button('添加渠道',()=>start('channel',{moduleId:m.id})),
+            m.id!=='agents' && m.id!=='extensions' && button(m.enabled?'关闭模块':'开启模块',()=>void save({action:'switch',id:m.id,value:!m.enabled})),
+            m.custom&&button('编辑模块',()=>start('module',{id:m.id,name:m.name,purpose:m.purpose}))))),
+        form||h('div',{className:'sr-actions'},button('新建模块',()=>start('module')),button('刷新状态',()=>void read(true)))),
+      error&&h('div',{role:'alert'},error,' ',button('刷新',()=>{setDraft(null);void read(true);})));
+  }
+
   function ago(sec) {
     if (sec === null || sec === undefined) return ''
     if (sec < 60) return '刚刚'
@@ -140,6 +235,7 @@ function SessionTaskBoard({React,sessionId,data,call,refresh}) {
   const [revision,setRevision]=React.useState(null);
   const [busy,setBusy]=React.useState(false);
   const [error,setError]=React.useState('');
+  const [notice,setNotice]=React.useState('');
   const lock=React.useRef(false),request=React.useRef(null);
   const [hiddenDraft,setHiddenDraft]=React.useState(null);
   const edited=React.useRef({}),editVersion=React.useRef(null);
@@ -150,10 +246,12 @@ function SessionTaskBoard({React,sessionId,data,call,refresh}) {
   if(draft)for(const key of Object.keys(form)){if(!edited.current[key])displayed[key]=draft[key]??'';}
   const text=(key,value)=>h('label',{style:{display:'grid',gap:'4px',marginBottom:'8px'}},key,value);
   const button=(label,click,disabled=false)=>h('button',{type:'button',onClick:click,disabled:busy||disabled},label);
-  const names={ready:'待执行',queued:'已送入本会话',running:'主聊天执行中',stopped:'回复中断，等待重试',answered:'已收到主聊天答复',stale:'目标已修订，等待重新执行',review:'待你验收',done:'已验收'};
+  const names={ready:'待 DeepSeek 派单',planning:'Claude 正在规划',executing:'GPT 正在执行',reviewing:'Claude 正在审核',changes_requested:'Claude 已退回整改',
+    approved:'审核通过，待 DeepSeek 汇报',reported:'DeepSeek 已汇报',paused:'已暂停',blocked:'等待处理',interrupted:'上次运行中断',
+    queued:'旧版排队记录',running:'旧版执行记录',stopped:'旧版回合已停止',answered:'旧版历史答复',stale:'目标已修订',review:'历史交付',done:'已验收'};
   async function act(action,extra={}){
     if(lock.current)return;
-    lock.current=true;setBusy(true);setError('');
+    lock.current=true;setBusy(true);setError('');setNotice('');
     const signature=JSON.stringify([sessionId,action,t?.id,extra]);
     if(request.current?.signature!==signature)request.current={signature,id:crypto.randomUUID()};
     try{
@@ -161,13 +259,14 @@ function SessionTaskBoard({React,sessionId,data,call,refresh}) {
       if(action==='preview'){setRead({id:t.id,...value});return;}
       if(action==='create'){select(value.id);setCreating(false);edited.current={};editVersion.current=null;setForm({goal:'',acceptance:'',target:''});}
       if(action==='revise')setRevision(null);
+      if(action==='notify'&&value.queued)setNotice('派单请求已送到本会话的 DeepSeek。');
       if(action!=='preview')setRead(null);
       await refresh?.();request.current=null;
-    }catch(e){setError(e?.message||String(e));}
+    }catch(e){setError(clientMessage(e));}
     finally{lock.current=false;setBusy(false);}
   }
   React.useEffect(()=>{
-    if(!['queued','running','answered'].includes(v?.phase))return;
+    if(!['planning','executing','reviewing'].includes(v?.phase))return;
     const timer=setInterval(()=>{if(!lock.current)void refresh?.()},1200);
     return ()=>clearInterval(timer);
   },[t?.id,v?.phase,refresh]);
@@ -179,7 +278,7 @@ function SessionTaskBoard({React,sessionId,data,call,refresh}) {
   const input=(key,rows,max,placeholder)=>h('textarea',{'aria-label':key==='goal'?'任务目标':'验收标准',rows,maxLength:max,value:displayed[key],placeholder,
     onChange:e=>update(key,e.target.value),style:{width:'100%',boxSizing:'border-box'}});
   return h('div',{className:'sr-board','data-yunshu-session-tasks':'1'},
-    (creating||draft||!t) ? h('form',{className:'sr-editor',onSubmit:e=>{
+    (creating||draft) ? h('form',{className:'sr-editor',onSubmit:e=>{
       e.preventDefault();if(displayed.goal.trim()&&displayed.acceptance.trim())void act('create',{...displayed,...(draft?(editVersion.current??{draftId:draft.id,draftRevision:draft.revision}):{})});
     }},
       draft?h('div',{role:'status'},h('strong',null,'主聊天 · 需求澄清'),draft.questions?.length>0&&h('ul',null,...draft.questions.map((q,i)=>h('li',{key:i},q)))):
@@ -189,7 +288,8 @@ function SessionTaskBoard({React,sessionId,data,call,refresh}) {
       text('交付文件（可选）',h('input',{'aria-label':'交付文件（可选）',value:displayed.target,maxLength:500,placeholder:'工作区相对路径；留空则交付聊天答复',onChange:e=>update('target',e.target.value)})),
       draft&&editVersion.current&&draft.revision!==editVersion.current.draftRevision&&h('div',{role:'status'},'主聊天已更新这张草案。',button('载入最新草案',resetInput)),
       h('div',{className:'sr-actions'},h('button',{type:'submit',className:'sr-primary',disabled:busy||!displayed.goal.trim()||!displayed.acceptance.trim()},'创建任务'),
-        t&&button(draft?'查看已有任务':'取消',()=>{if(draft)setHiddenDraft(draft.id);setCreating(false);resetInput();}))) :
+        button(draft&&t?'查看已有任务':'取消',()=>{if(draft)setHiddenDraft(draft.id);setCreating(false);resetInput();}))) :
+    !t?h('div',{className:'sr-section'},h('p',null,'在主聊天说明需求，DeepSeek 建单后会在这里显示。'),button('手动建单',()=>{resetInput();setCreating(true);})):
     h(React.Fragment,null,
       h('div',{className:'sr-actions'},button('新建任务',()=>{resetInput();setCreating(true);setRead(null);setError('');}),
         plan?.state==='clarifying' && button('查看澄清草案',()=>{resetInput();setHiddenDraft(null);}),
@@ -199,21 +299,25 @@ function SessionTaskBoard({React,sessionId,data,call,refresh}) {
         h('h2',{className:'sr-goal'},t.goal),h('p',null,'验收标准　'+v.acceptance),
         h('p',{className:'sr-muted'},v.target?'交付文件　'+v.target:'交付形式　聊天答复'),
         h('div',{className:'sr-actions'},
-          !['done','queued','running'].includes(v.phase) && button('修改任务目标',()=>setRevision({id:t.id,text:t.goal})),
-          v.phase==='ready' && button('在主聊天执行',()=>act('start')),
-          v.phase==='stopped' && button('重试执行',()=>act('start')),
-          v.phase==='answered' && button('收取交付结果',()=>act('collect')),
-          v.phase==='answered' && button('重新执行',()=>act('start')),
-          ['stale','review'].includes(v.phase) && button('重新执行',()=>act('redo')),
-          ['review','done'].includes(v.phase) && button('查看交付内容',()=>act('preview'))),
+          v.workflow && v.phase==='ready' && button('修改任务目标',()=>setRevision({id:t.id,text:t.goal})),
+          v.workflow && (v.phase==='ready'||v.canRetry||v.phase==='changes_requested'||v.phase==='approved') && !v.childId &&
+            button(({ready:'交给 DeepSeek 派单',changes_requested:'按审核意见重开',approved:'请 DeepSeek 汇报'})[v.phase]||'接续工单',()=>act('notify')),
+          v.workflow && !['reported','paused','changes_requested'].includes(v.phase) && button('停止此单',()=>act('pause')),
+          (v.workflow && (v.evidence||v.plan)||['review','done'].includes(v.phase)) && button('查看回执',()=>act('preview'))),
+        v.parentId&&h('p',null,'整改自 ',button(v.parentId.slice(-8),()=>{select(v.parentId);setRead(null);})),
+        v.childId&&h('p',null,'整改工单 ',button(v.childId.slice(-8),()=>{select(v.childId);setRead(null);})),
+        v.reason&&h('p',{role:'status'},v.reason),
+        v.plan?.steps?.length>0&&h('details',null,h('summary',null,'Claude 的规划'),h('ol',null,...v.plan.steps.map((line,i)=>h('li',{key:i},line)))),
+        v.review&&h('div',null,h('strong',null,'Claude 审核'),h('p',null,v.review.summary),
+          v.review.issues?.length>0&&h('ul',null,...v.review.issues.map((line,i)=>h('li',{key:i},line)))),
+        v.evidence?.files?.length>0&&h('p',null,'交付文件　'+v.evidence.files.map(f=>f.path).join('、')),
         revision?.id===t.id && h('form',{className:'sr-editor',onSubmit:e=>{e.preventDefault();if(revision.text.trim())void act('revise',{goal:revision.text});}},
           text('新任务目标',h('textarea',{value:revision.text,maxLength:2000,onChange:e=>setRevision({id:t.id,text:e.target.value})})),
           h('button',{type:'submit',disabled:busy||!revision.text.trim()},'保存修改'),button('取消',()=>setRevision(null))),
-        ['review','done'].includes(v.phase) && read?.id===t.id && h('section',{className:'sr-section'},
+        read?.id===t.id && h('section',{className:'sr-section'},
           read.artifact ? h(TaskArtifact,{React,artifact:read.artifact}) :
-            h('pre',{style:{maxHeight:'190px',overflow:'auto',whiteSpace:'pre-wrap',overflowWrap:'anywhere',userSelect:'text'}},read.text),
-          v.phase==='review' && button('已核对，验收通过',()=>act('accept',{receipt:read.receipt,digest:read.digest,reviewed:true}))))),
-    error && h('p',{role:'alert',className:'sr-notice'},error));
+            h('pre',{style:{maxHeight:'190px',overflow:'auto',whiteSpace:'pre-wrap',overflowWrap:'anywhere',userSelect:'text'}},read.text)))),
+    notice && h('p',{role:'status'},notice),error && h('p',{role:'alert',className:'sr-notice'},error));
 }
 
 function StarTaskBoard({ React, sessionId, data, call, refresh, renderActivity }) {
@@ -540,7 +644,7 @@ function StarTaskBoard({ React, sessionId, data, call, refresh, renderActivity }
       : null
 
     return h('div', { className: 'ysu-panel', onClick: e => e.stopPropagation() },
-      alerts, runNodes, needsYouNodes, fixingNodes, settledNodes, archiveNodes,
+      h(TaskDirectory,{key:'directory-'+sessionId,React,sessionId,call}),alerts, runNodes, needsYouNodes, fixingNodes, settledNodes, archiveNodes,
       (data || health) && h('details', null, h('summary', null, '统计与体检' + (checks.some(c => !c.ok) ? ' · ' + checks.filter(c => !c.ok).length + ' 项异常' : '')), bar, checkNodes), empty)
   }
 

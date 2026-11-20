@@ -3,6 +3,9 @@ import { existsSync, mkdirSync, readFileSync, realpathSync, renameSync, statSync
 import { isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import { createUserMessage } from '@deepseek-ai/dsh-llm';
+import { uuidFor } from './chat-plan.mjs';
+import { roleVersion, roleView, ticketPaused, pauseTicket, runRoleFlow, approvedDelivery, linkChild, setCorrections, markReported } from './role-flow.mjs';
 import { runUnited } from './task-engine/bin/task-actions-consumer.mjs';
 import { readPanelLedger } from './task-engine/bin/panel-control.mjs';
 import { hashFile, readReceived, reviewRefs } from './task-engine/bin/verdict-evidence.mjs';
@@ -95,8 +98,9 @@ function ticket(root,id) {
   const frames=readPanelLedger(root)?.framesOf(id);
   const goal=json(join(dir,'goal.json')), state=json(join(dir,'state.json'));
   need(frames?.[0]?.op==='new' && goal.panel?.requestId && frames[0].payload.panel?.requestId===goal.panel.requestId &&
-    frames[0].payload.panel.target===goal.panel.target && frames[0].payload.acceptance===goal.acceptance && state.run_id===id,'任务原票不完整，请刷新后重试。');
+    ['target','workflow','parentId','reviewId'].every(k=>frames[0].payload.panel[k]===goal.panel[k]) && frames[0].payload.acceptance===goal.acceptance && state.run_id===id,'任务原票不完整，请刷新后重试。');
   const original=frames[0].payload;
+  need(JSON.stringify(original.panel.modules??[])===JSON.stringify(goal.panel.modules??[]),'模块清单与原工单不符。');
   need(original.goal===goal.goal && original.goal_id===goal.goal_id && original.goal_rev===goal.revision &&
     diffState(reduce(frames).state,state).length===0,'任务缓存与原始账本不一致，请先核对原票。');
   const plan=readPanelPlan(dir,frames);
@@ -150,97 +154,145 @@ function actualFile(cwd,name){
   need(rel && !isAbsolute(rel) && rel!=='..' && !rel.startsWith('..'+sep) && statSync(file).isFile(),'交付文件已经移出工作区。');
   return file;
 }
-function verifyTextFile(cwd,name,receipt){
-  const file=actualFile(cwd,name);
-  need(statSync(file).size<=2*1024*1024,'这份文件超过可核对的文本大小。');
-  const bytes=readFileSync(file);
-  need(sha(bytes.toString('utf8').replace(/\r\n/gu,'\n').replace(/\n$/u,''))===receipt.hash,'文件已改变，请回到主聊天重新执行并读回。');
-  return {uri:file,sha256:sha(bytes)};
-}
 
-export async function registerSessionTasks(ctx, engineFor) {
+function roleJournal(root,id,cwd) {
+  const current=()=>ticket(root,id);
+  return {
+    assignWriter(flow) {
+      dispatch(root,current(),'builder','按 Claude 规划执行 '+flow.plan.runId,'codex-'+id);
+    },
+    assignReviewer(flow) {
+      const t=current(), proof=join(t.dir,'artifacts','codex-delivery.json');
+      atom(proof,JSON.stringify(flow.evidence,null,2)+'\n');
+      const refs=[{uri:proof,sha256:hashFile(proof)},...flow.evidence.files.map(f=>({uri:actualFile(cwd,f.path),sha256:f.sha256}))];
+      receive(root,t,'builder',latest(t,'builder').message_id,'finding',flow.evidence.text?.slice(0,1600)||'GPT 已交回工单列明的文件。',refs,
+        {kind:'codex',runId:flow.evidence.runId,sessionId:flow.evidence.sessionId,digest:flow.evidence.digest});
+      dispatch(root,current(),'guardian','独立审核 GPT 交付 '+flow.evidence.digest,'claude-review-'+id);
+    },
+    finishReview(flow) {
+      const t=current();
+      if(t.state.status==='done')return;
+      const passed=flow.review.decision==='approved';
+      const evidence=reviewRefs(t.frames,t.dir,t.state).map(({uri,sha256})=>({uri,sha256}));
+      need(evidence.length===flow.evidence.files.length+1,'原账本记录的 GPT 交付与审核范围不匹配。');
+      const ack=receive(root,t,'guardian',latest(t,'guardian').message_id,passed?'ack':'decline',flow.review.summary,evidence,
+        {kind:'claude-code',runId:flow.review.runId,sessionId:flow.review.sessionId,digest:flow.review.binding,issues:flow.review.issues});
+      if(passed)command(root,['verdict','--run',id,'--select',ack,'--rule','Claude 已按原票验收标准独立审核同一份 GPT 交付。','--status','done']);
+    }
+  };
+}
+export async function registerSessionTasks(ctx,engineFor) {
   const handle=await ctx.sessionProjections.register({key:'yunshuTaskTurns',stateVersion:2,
     stateSchema:z.object({inherited:z.number(),turn:z.number().nullable(),active:z.array(z.string()),other:z.boolean(),rows:z.record(z.string(),z.json())}),
     init:initial,apply:foldTaskTurn});
-  const inflight=new Map();
+  const toReport=new Map();
+  function requireTasks() {need(ctx.get('yunshuControl')?.enabled('tasks')!==false,'任务台已关闭。');}
+  function create(root,p,parent) {
+    need(uuid.test(p.requestId),'创建请求编号无效。');
+    const target=relativeFile(p.target??'');
+    mkdirSync(join(root,'runs'),{recursive:true});
+    const relationship=parent?{parentId:parent.id,reviewId:parent.review.runId}:{};
+    command(root,['new','--panel-stdin'],JSON.stringify({workflow:roleVersion,requestId:p.requestId,goal:p.goal,accept:p.acceptance,target,modules:p.modules,...relationship}));
+    return {id:'r-ui-'+p.requestId.toLowerCase()};
+  }
+  function native(t,agent) {
+    const contract={acceptance:t.goal.acceptance,target:t.target,modules:t.goal.panel.modules??[]};
+    if(t.goal.panel.workflow===roleVersion) return {...contract,...roleView(t)};
+    const attempt=attemptFor(handle,agent.session,t),receipt=currentReceipt(t,'builder');
+    return {...contract,workflow:null,phase:ticketPaused(t)?'paused':status(t,attempt),receipt:receipt?.message_id??null,
+      summary:receipt?.claim_statement??'',reason:ticketPaused(t)?'用户已停止这张工单。':'旧版工单，保留原始记录。'};
+  }
   function describe(engine,agent,board) {
     const root=scope(engine,agent.session);
     const tasks=board.tasks.map(row=>{
-      const t=ticket(root,row.id),attempt=attemptFor(handle,agent.session,t);
-      const evidence=currentReceipt(t,'builder');
-      return {...row,goal:t.title,native:{phase:status(t,attempt),acceptance:t.goal.acceptance,target:t.target,answerSeq:attempt?.answerSeq??null,
-        receipt:evidence?.message_id??null,summary:evidence?.claim_statement??'',turn:attempt?.turn??null}};
+      const t=ticket(root,row.id),v=native(t,agent);
+      return {...row,goal:t.title,status:v.phase,native:v};
     });
-    return {...board,tasks,nativeTasks:true};
+    const count=(...phases)=>tasks.filter(t=>phases.includes(t.status)).length;
+    const summary={runs:tasks.length,assigned:count('ready'),working:count('planning','executing','reviewing'),
+      attention:count('blocked','interrupted','changes_requested','approved'),done:count('reported','done')};
+    return {...board,tasks,summary,nativeTasks:true};
   }
-  async function doAction(root,agent,action,p,signal) {
-    const session=agent.session;
-    if(action==='create'){
-      need(uuid.test(p.requestId),'创建请求编号无效。');
-      const target=relativeFile(p.target??'');
-      mkdirSync(join(root,'runs'),{recursive:true});
-      command(root,['new','--panel-stdin'],JSON.stringify({requestId:p.requestId,goal:p.goal,accept:p.acceptance,target}));
-      return {id:'r-ui-'+p.requestId.toLowerCase()};
-    }
+  async function route(engine,agent,p,signal) {
+    requireTasks();
+    const root=scope(engine,agent.session);
     let t=ticket(root,p.runId);
-    let attempt=attemptFor(handle,session,t);
-    let phase=status(t,attempt);
-    if(action==='revise'){
-      need(phase!=='done' && !['queued','running'].includes(phase) && uuid.test(p.requestId) && typeof p.goal==='string' && p.goal.trim() && p.goal.length<=2000,'当前任务暂不可修订。');
-      const sent=latest(t,'builder');
-      if(sent && !currentReceipt(t,'builder') && !staleContract(t)){
-        receive(root,t,'builder',sent.message_id,'decline','用户修订任务，原派单已退回。',[],{kind:'user-revision',sessionId:session.id});
+    if(ticketPaused(t))return {runId:t.id,phase:'paused',nextAction:'stop'};
+    need(t.goal.panel.workflow===roleVersion,'旧版工单已归档。需要继续时，请根据用户的新要求建单。');
+    need(['dispatch','resume','rework','report'].includes(p.action),'未知派单动作。');
+    if(p.action==='rework') {
+      const parent=roleView(t);
+      need(parent.phase==='changes_requested' && parent.review?.issues?.length,'此单没有 Claude 的退回意见。');
+      const requestId=uuidFor(t.id+'\0'+parent.review.runId);
+      const child=create(root,{requestId,goal:t.title,acceptance:t.goal.acceptance,target:t.target,modules:t.goal.panel.modules},parent);
+      linkChild(t,child.id);
+      t=ticket(root,child.id);
+      setCorrections(t,parent);
+    } else if(t.goal.panel.parentId) {
+      const parent=ticket(root,t.goal.panel.parentId),view=roleView(parent);
+      if(ticketPaused(parent))return pauseTicket(t,'原单已停止。');
+      need(view.childId===t.id && view.review?.runId===t.goal.panel.reviewId,'整改工单缺少原审核。');
+      setCorrections(t,view);
+    }
+    const view=p.action==='report'?roleView(t):await runRoleFlow(t,agent,ctx.get('yunshuControl')?.taskWorkers,
+      {signal,retry:p.action==='resume',journal:roleJournal(root,t.id,agent.session.header.cwd)});
+    const result={id:t.id,runId:t.id,parentId:view.parentId,phase:view.phase,reason:view.reason,childId:view.childId,
+      nextAction:view.phase==='changes_requested'?'rework':view.phase==='approved'?'report_to_user':'status_only'};
+    if(view.phase==='changes_requested')result.review=view.review;
+    if(view.phase==='approved' || p.action==='report' && view.phase==='reported') {
+      result.report=approvedDelivery(t,agent.session.header.cwd);
+      if(view.phase==='approved'){
+        const pending=toReport.get(agent.session.id)??new Set();
+        pending.add(t.id);toReport.set(agent.session.id,pending);
       }
-      command(root,['panel-action','--run',t.id],JSON.stringify({id:'ta-'+p.requestId,action:'edit-goal',runId:t.id,goal:p.goal.trim()}));
-      return {phase:'ready'};
     }
-    if(action==='start' || action==='redo'){
-      need(uuid.test(p.requestId),'执行请求编号无效。');
-      if(!['ready','stopped','answered','review','stale'].includes(phase))return {phase};
-      const old=latest(t,'builder');
-      const repeated=Object.values(handle.stateOf(session).rows).find(row=>row.run===t.id && row.rpc.endsWith(':'+p.requestId.toLowerCase()));
-      if(repeated)return {phase:repeated.status};
-      const needsNew=!!old && (currentReceipt(t,'builder')||staleContract(t));
-      if(needsNew && !currentReceipt(t,'builder'))receive(root,t,'builder',old.message_id,'decline','原任务版本已更新。',[],{kind:'superseded'});
-      const mid=old && !needsNew?old.message_id:dispatch(root,t,'builder',
-        (needsNew?'按当前版本重新执行（'+(t.frames.filter(f=>f.op==='dispatch').length+1)+'）：':'执行当前任务：')+t.title,
-        'main-builder-'+p.requestId);
-      const rpc='ys-task:'+t.id+':'+mid+':'+p.requestId.toLowerCase();
-      if(handle.stateOf(session).rows[rpc])return {phase:handle.stateOf(session).rows[rpc].status};
-      const wording=['请执行任务台上的这项工作。',t.title,...t.steps,'验收标准：'+t.goal.acceptance,
-        t.target?'交付文件：'+t.target+'。在当前工作区生成指定文件。普通文本用文件工具完整读回，图片、音频或视频等可使用已接入的扩展交回文件回执。':'交付形式：在此会话给出可验收的完整答复。'].join('\n');
-      await ctx.sessionController.prompt({sessionId:session.id,requestId:rpc,mode:'followup',content:[{type:'text',text:wording}]},signal??new AbortController().signal);
-      return {phase:'queued'};
+    return result;
+  }
+  async function action(engine,agent,name,p,signal) {
+    requireTasks();signal?.throwIfAborted();
+    const root=scope(engine,agent.session);
+    if(name==='create')return create(root,p);
+    const t=ticket(root,p.runId);
+    if(name==='pause'){
+      let cur=t;
+      while(cur){
+        const child=cur.goal.panel.workflow===roleVersion?roleView(cur).childId:null;
+        pauseTicket(cur);
+        cur=child?ticket(root,child):null;
+      }
+      return {id:t.id,phase:'paused'};
     }
-    if(action==='collect'){
-      if(phase==='review'||phase==='done')return {phase};
-      need(phase==='answered' && attempt.answerSeq!=null,'本任务还没有可交回的完整答复。');
-      const {target:e}=await ctx.sessionQuery.readEvent({sessionId:session.id,seq:attempt.answerSeq,before:0,after:0},signal);
-      need(e.type==='assistant/message' && e.data.turn===attempt.turn && !e.data.interrupted,'会话原始答复不匹配。');
-      const body=e.data.message.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
-      need(body.trim(),'原回合没有可见答复。');
-      const origin={kind:'main-chat',sessionId:session.id,turn:attempt.turn,seq:e.seq,requestId:attempt.rpc};
-      let proof;
-      if(t.target){
-        const artifact=attempt.artifacts?.findLast(a=>a.path===t.target);
-        if(artifact){
-          const uri=actualFile(session.header.cwd,t.target);
-          need(statSync(uri).size===artifact.bytes && hashFile(uri)===artifact.sha256,'扩展交回的文件已改变，请重新执行。');
-          origin.artifact=artifact;proof={uri,sha256:artifact.sha256};
-        }else{
-          const v=ctx.sessionProjections.snapshot(session,['yunshuFileReceipts']).values.yunshuFileReceipts;
-          const receipt=v?.turns?.[String(attempt.turn)]?.files.find(f=>f.verification==='matched' && f.relative===t.target);
-          need(receipt,'这轮没有完整核对指定的交付文件。可以重新执行，再收取产物。');
-          proof=verifyTextFile(session.header.cwd,t.target,receipt);
+    if(ticketPaused(t))return {id:t.id,phase:'paused'};
+    if(t.goal.panel.workflow===roleVersion){
+      const v=roleView(t);
+      if(name==='revise'){
+        need(v.phase==='ready' && uuid.test(p.requestId) && typeof p.goal==='string' && p.goal.trim() && p.goal.length<=2000,'仅待派单的任务可以修改目标。');
+        command(root,['panel-action','--run',t.id],JSON.stringify({id:'ta-'+p.requestId,action:'edit-goal',runId:t.id,goal:p.goal.trim()}));
+        return {phase:'ready'};
+      }
+      if(name==='notify'){
+        const actions={ready:'dispatch',blocked:'resume',interrupted:'resume',changes_requested:'rework',approved:'report'};
+        const next=actions[v.phase];
+        need(next && uuid.test(p.requestId),'当前步骤已有负责人。');
+        const messageId='ys-board-'+p.requestId;
+        const queued=[...agent.inbox.nextTurn,...agent.inbox.nextStep].some(m=>m.source?.noticeId===messageId || (m.source?.kind==='yunshu-task-board' && m.source.runId===t.id));
+        if(!queued){
+          const content=[{type:'text',text:'用户在任务台请求'+({dispatch:'派单',resume:'接续派单',rework:'按 Claude 的退回意见重建工单',report:'汇报已审核结果'}[next])+'。请调用 yunshu_task_route，action='+next+'，runId='+t.id+'。'}];
+          agent.followup(createUserMessage({source:{kind:'yunshu-task-board',runId:t.id,noticeId:messageId},content}));
         }
-      }else{
-        const file=join(t.dir,'artifacts','answer-'+e.seq+'.md');atom(file,body);proof={uri:file,sha256:sha(Buffer.from(body))};
+        return {phase:v.phase,queued:true};
       }
-      receive(root,t,'builder',attempt.mid,'finding',body.slice(0,1600),[proof],origin);
-      return {phase:'review'};
+      if(name==='preview')return {text:[
+        v.plan&&'Claude 规划\n'+v.plan.steps.join('\n'),
+        v.evidence&&'GPT 交付\n'+(v.evidence.text||'')+'\n'+v.evidence.files.map(f=>f.path+'  '+f.sha256).join('\n'),
+        v.evidence?.channels?.receipts.map(r=>'使用渠道　'+r.name+'\n'+r.summary).join('\n'),
+        v.review&&'Claude 审核\n'+[v.review.summary,...v.review.issues].join('\n'),
+        v.report&&'DeepSeek 已汇报　'+v.report.code
+      ].filter(Boolean).join('\n\n')};
+      throw Error('此工单由主聊天统筹，请使用任务台的派单操作。');
     }
     if(action==='preview'){
-      need(phase==='review'||phase==='done','还没有已交回的产物。');
+      need(['review','done'].includes(status(t,attemptFor(handle,agent.session,t))),'还没有已交回的产物。');
       const refs=reviewRefs(t.frames,t.dir,t.state);
       need(refs.length===1,'交付内容已改变或丢失，请重新核对。');
       const frame=t.frames.findLast(f=>f.op==='recv' && f.payload.from==='builder');
@@ -254,36 +306,28 @@ export async function registerSessionTasks(ctx, engineFor) {
       need(sha(bytes)===refs[0].sha256,'读取期间文件已变化。');
       return {text:bytes.toString('utf8'),digest:refs[0].sha256,receipt:latest(t,'builder','recv').message_id};
     }
-    if(action==='accept'){
-      if(phase==='done')return {phase};
-      need(phase==='review' && p.reviewed===true && typeof p.receipt==='string' && p.receipt===latest(t,'builder','recv')?.message_id,'请先核对当前版本的交付物。');
-      const evidence=reviewRefs(t.frames,t.dir,t.state);
-      need(evidence.length===1 && evidence[0].sha256===p.digest,'交付物已改变或丢失，暂不能验收。');
-      const mid=dispatch(root,t,'guardian','由用户核对交付版本 '+p.receipt+'：'+t.goal.acceptance,'main-guardian-'+p.receipt);
-      t=ticket(root,t.id);
-      const verified=reviewRefs(t.frames,t.dir,t.state);
-      need(verified.length && JSON.stringify(verified)===JSON.stringify(evidence),'验收期间文件已变更。');
-      const ack=receive(root,t,'guardian',mid,'ack','用户按原验收标准核对并通过。',verified.map(({uri,sha256})=>({uri,sha256})),
-        {kind:'user-review',sessionId:session.id,receipt:p.receipt});
-      command(root,['verdict','--run',t.id,'--select',ack,'--rule','用户在原会话核对完整交付物并确认符合原验收标准。','--status','done']);
-      return {phase:'done'};
-    }
-    throw Error('不支持的会话任务操作。');
+
+    throw Error('旧版工单只保留历史结果。');
   }
-  const api={scope,describe,async action(engine,agent,action,p,signal){
-    need(ctx.get?.('yunshuControl')?.enabled('tasks')!==false,'任务台已关闭。');
-    const root=scope(engine,agent.session),key=root+'\0'+(p.runId??p.requestId);
-    const former=inflight.get(key)??Promise.resolve();
-    const next=former.catch(()=>{}).then(()=>doAction(root,agent,action,p,signal));
-    inflight.set(key,next);
-    try{return await next;}finally{if(inflight.get(key)===next)inflight.delete(key);}
-  }};
   ctx.on('session/event',(session,e)=>{
-    if(e.type!=='turn/end' || ctx.get?.('yunshuControl')?.enabled('tasks')===false)return;
-    queueMicrotask(()=>{
-      const rows=Object.values(handle.stateOf(session).rows).filter(r=>r.turn===e.data.turn && r.status==='answered');
-      for(const r of rows) void api.action(engineFor(),{session},'collect',{runId:r.run}).catch(()=>{});
-    });
+    const ids=toReport.get(session.id);
+    if(e.type!=='turn/end' || !ids)return;
+    toReport.delete(session.id);
+    if(e.data.reason?.kind!=='completed')return;
+    const nodes=session.surface.nodes;
+    for(let i=nodes.length-1;i>=0;i--){
+      const seq=nodes[i],message=session.eventAt(seq);
+      if(message.type!=='assistant/message' || !session.isOwnSeq(seq))continue;
+      if(message.data.turn!==e.data.turn || message.data.interrupted)break;
+      const blocks=message.data.message.content;
+      if(blocks.some(b=>b.type==='tool-call'))break;
+      const text=blocks.filter(b=>b.type==='text').map(b=>b.text).join('\n');
+      for(const id of ids){
+        try { markReported(ticket(scope(engineFor(),session),id),session.header.cwd,{text,seq,turn:e.data.turn}); }
+        catch(err) {ctx.logger?.warn?.('云舒汇报未入账：'+err.message);}
+      }
+      break;
+    }
   });
-  return api;
+  return {scope,describe,action,route};
 }

@@ -2,14 +2,15 @@
 import { execFile } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { promisify } from 'node:util';
+import { channelIssue } from '../system/channel-status.mjs';
 
 const execFileAsync = promisify(execFile);
 
 export function claudeArgs(request, config) {
   const args = [...(config.argvPrefix ?? []), '-p', '--output-format', 'json',
-    '--permission-mode', 'acceptEdits', '--permission-prompts', 'none',
+    '--permission-mode', request.sandbox === 'read-only' ? 'plan' : 'acceptEdits', '--permission-prompts', 'none',
     '--setting-sources', 'user', '--strict-mcp-config', '--no-chrome',
-    '--tools', 'Read,Edit,Write,Glob,Grep'];
+    '--tools', request.sandbox === 'read-only' ? 'Read,Glob,Grep' : 'Read,Edit,Write,Glob,Grep'];
   if (config.model) args.push('--model', config.model);
   if (config.maxBudgetUsd) args.push('--max-budget-usd', String(config.maxBudgetUsd));
   if (request.resumeThreadId) args.push('--resume', request.resumeThreadId);
@@ -60,7 +61,10 @@ export async function runClaudeRequest(config, request, context = {}) {
     if (context.signal?.aborted) throw error;
     stdout = error.stdout;
     exitCode = typeof error.code === 'number' ? error.code : 1;
-    if (!stdout) throw new Error('claude-process-failed');
+    if (!stdout) {
+      const issue=channelIssue(error.stderr||error.code);
+      throw Error(issue.reason+issue.action);
+    }
   }
   const parsed = parseClaudeResult(stdout, exitCode);
   return { kind: 'run', outcome: {

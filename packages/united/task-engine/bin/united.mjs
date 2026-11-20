@@ -130,6 +130,19 @@ function cmdNew(a) {
         typeof input.target !== 'string' || input.target.length > 500) die('任务参数无效')
     a = {goal:input.goal.trim(), accept:input.accept.trim()}
     panel = {requestId:input.requestId.toLowerCase(),target:input.target}
+    if (input.workflow !== undefined) {
+      if (input.workflow !== 'claude-codex-claude-v1') die('未知的任务流程')
+      panel.workflow = input.workflow
+      if (input.modules?.length) {
+        if (!Array.isArray(input.modules) || input.modules.length>8 || !input.modules.every(v=>typeof v==='string' && /^[a-z][a-z0-9._-]{1,80}$/.test(v))) die('模块清单无效')
+        panel.modules=[...new Set(input.modules)].sort()
+      }
+      if (input.parentId || input.reviewId) {
+        if (!/^r-ui-[a-f0-9-]{36}$/.test(input.parentId) || !/^claude-[a-f0-9-]{36}$/.test(input.reviewId)) die('整改工单缺少原票或审核编号')
+        panel.parentId = input.parentId
+        panel.reviewId = input.reviewId
+      }
+    }
   }
   if (!a.goal) die('--goal 必填')
   if (!a.accept) die('--accept 必填（验收标准不能省）')
@@ -141,7 +154,9 @@ function cmdNew(a) {
   if (frames.length) {
     const original = frames[0].payload
     if (frames[0].op !== 'new' || original.goal !== a.goal || original.acceptance !== a.accept ||
-        original.panel?.target !== panel.target) die('同一创建请求的内容不一致')
+        original.panel?.target !== panel.target || original.panel?.workflow !== panel.workflow ||
+        original.panel?.parentId !== panel.parentId || original.panel?.reviewId !== panel.reviewId ||
+        JSON.stringify(original.panel?.modules??[])!==JSON.stringify(panel.modules??[])) die('同一创建请求的内容不一致')
     if (existsSync(join(dir,'state.json')) && existsSync(join(dir,'goal.json')) && existsSync(join(dir,'disposition.json'))) {
       console.log(runId); return
     }

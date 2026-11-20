@@ -7,7 +7,7 @@ function text(value,max,label){
   check(typeof value==='string' && value.trim().length<=max,label+'格式或长度无效。');
   return value.trim();
 }
-function uuidFor(seed){
+export function uuidFor(seed){
   const b=createHash('sha256').update(seed).digest();
   b[6]=(b[6]&15)|80;b[8]=(b[8]&63)|128;
   const v=b.subarray(0,16).toString('hex');
@@ -18,7 +18,7 @@ function currentUser(session){
   for(let i=nodes.length-1;i>=0;i--){
     const seq=nodes[i],event=session.eventAt(seq);
     if(!session.isOwnSeq(seq) || event.type!=='user/message' || event.data.source?.kind!=='user')continue;
-    check(!event.data.source.rpcId?.startsWith('ys-task:'),'正在执行已有派单，请按原票交付。');
+    check(!event.data.source.rpcId?.startsWith('ys-task:'),'这条旧版自派消息已停用，请等待用户的新指令。');
     return {id:event.data.id,seq};
   }
   throw Error('建单需要当前会话中的用户消息。');
@@ -41,27 +41,41 @@ function fields(input){
   const raw=input.questions??[];
   check(Array.isArray(raw)&&raw.length<=6,'待澄清问题最多六个。');
   const questions=raw.map(v=>text(v,300,'待澄清问题')).filter(Boolean);
-  return {goal,acceptance,target,questions};
+  const modules=input.modules??[];
+  check(Array.isArray(modules) && modules.length<=8 && modules.every(m=>typeof m==='string' && /^[a-z][a-z0-9._-]{1,80}$/u.test(m)),'所选模块无效。');
+  return {goal,acceptance,target,questions,modules:[...new Set(modules)].sort()};
 }
-const same=(a,b)=>a.goal===b.goal&&a.acceptance===b.acceptance&&a.target===b.target;
+const same=(a,b)=>a.goal===b.goal&&a.acceptance===b.acceptance&&a.target===b.target&&JSON.stringify(a.modules??[])===JSON.stringify(b.modules??[]);
 export function chatPlanBridge(servicePromise){
   const working=new Map();
+  const owners=new WeakMap();
   function serial(root,fn){
     const before=working.get(root)??Promise.resolve();
     const next=before.catch(()=>{}).then(fn);
     working.set(root,next);return next.finally(()=>{if(working.get(root)===next)working.delete(root);});
   }
   async function send(api,engine,agent,root,plan,signal){
-    // Persist intent before either external operation. Both native operations
-    // already deduplicate by these stable IDs, including an interrupted retry.
     savePlan(root,plan);
-    const result=await api.action(engine,agent,'create',{requestId:plan.id,goal:plan.goal,acceptance:plan.acceptance,target:plan.target},signal);
-    await api.action(engine,agent,'start',{runId:result.id,requestId:uuidFor('dispatch:'+plan.id)},signal);
-    return savePlan(root,{...plan,state:'dispatched',runId:result.id});
+    const result=await api.action(engine,agent,'create',{requestId:plan.id,goal:plan.goal,acceptance:plan.acceptance,target:plan.target,modules:plan.modules},signal);
+    const saved=savePlan(root,{...plan,state:'dispatched',runId:result.id});
+    return {...saved,...await api.route(engine,agent,{runId:result.id,action:'dispatch'},signal),id:saved.id};
   }
   return {
     view:readPlan,
+    ownsTurn(session){
+      const nodes=session.surface.nodes;
+      for(let i=nodes.length-1;i>=0;i--){
+        const seq=nodes[i],e=session.eventAt(seq);
+        if(e.type!=='user/message' || !session.isOwnSeq(seq)) continue;
+        const source=e.data.source;
+        if(source?.kind==='yunshu-task-board' || source?.rpcId?.startsWith('ys-task:')) return true;
+        if(source?.kind==='user')return owners.get(session)===e.data.id;
+      }
+      return false;
+    },
+    claimTurn(session){try{owners.set(session,currentUser(session).id);}catch{}},
     async fromChat(engine,agent,input,signal){
+      this.claimTurn(agent.session);
       const api=await servicePromise,root=api.scope(engine,agent.session);
       return serial(root,async()=>{
         signal?.throwIfAborted();
@@ -74,7 +88,8 @@ export function chatPlanBridge(servicePromise){
         }
         if(old?.state==='dispatched' && (old.sourceId===user.id || input.planId===old.id || (input.stage==='dispatch' && same(old,p) && input.newTask!==true))){
           check(same(old,p),'这张任务已经派发，请查看原票并按需纠偏。');
-          return old;
+          const board=await api.route(engine,agent,{runId:old.runId,action:'dispatch'},signal);
+          return {...old,...board,id:old.id};
         }
         if(old?.state==='manual' && (input.planId===old.id || input.newTask!==true) && input.stage==='dispatch'){
           check(same(old,p) && !p.questions.length,'这张草案已由用户修订。请用 yunshu_task_current 读取原票，按当前版本派发。');
@@ -102,7 +117,7 @@ export function chatPlanBridge(servicePromise){
         const old=readPlan(root);
         check(old?.id===input.draftId && old.revision===input.draftRevision,'主聊天已经更新了草案，请先核对最新内容。');
         check(old.state==='clarifying' || old.state==='manual','这张任务已在主聊天派发。');
-        const p=fields(input);
+        const p=fields({...input,modules:input.modules??old.modules});
         check(p.acceptance,'请填写验收标准。');
         if(old.state==='manual'){
           check(same(old,p),'这张草案已被手动采用，请在原任务中修订。');

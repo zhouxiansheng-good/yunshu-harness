@@ -106,9 +106,10 @@ export function taskProbe(config) {
     const scanSeconds = Number(schedule.fallbackScanSeconds)
     const maxAgeSeconds = Math.max(90, Number.isFinite(scanSeconds) && scanSeconds > 0 ? scanSeconds * 3 : 90)
     const ageSeconds = Math.max(0, Math.floor((Date.now() - updated.getTime()) / 1000))
-    const stale = ageSeconds > maxAgeSeconds
+    const active = Object.values(state.tasks).filter(t=>['running','queued','pending','assigned'].includes(t?.state??t?.status)).length
+    const stale = active>0 && ageSeconds > maxAgeSeconds
     return result('task', stale ? 'warn' : 'ok',
-      stale ? '台账停更；任务现状待对账' : '后台台账新鲜可解析；联合体 runs ' + runs + ' 条',
+      stale ? '后台调度器尚未更新 '+active+' 项任务，请检查调度服务。' : active ? '后台任务进度已更新。' : '后台没有等待调度的任务。',
       statePath + ': tasks=' + taskCount + ', runs=' + runs + ', ageSeconds=' + ageSeconds + ', mtime=' + updatedAt,
       { facets: { storage: 'ok', execution: 'unknown', background: stale ? 'warn' : 'ok' },
         metrics: { runs, runStatuses: { ...runStatuses }, tasks: taskCount, ageSeconds, maxAgeSeconds } })

@@ -1,6 +1,6 @@
 /** Yunshu delegates coding; the selected agent owns the code changes. */
 import { createHash, randomUUID } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { closeSync, copyFileSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readlinkSync, readdirSync, readSync, realpathSync, renameSync, rmdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
@@ -9,6 +9,7 @@ import { locateCodex } from './vendor/dsh-codex-peer/lib/locate.js';
 import { runPeerRequest } from './vendor/dsh-codex-peer/lib/execute.js';
 import { createStageWorktree, requireCleanGitRoot, requireGitHead } from './stage.mjs';
 import { probeRelay } from './relay-auth.mjs';
+import { channelIssue } from '../system/channel-status.mjs';
 import { claudeHome, locateClaude, probeClaudeRelay } from './claude-relay.mjs';
 import { runClaudeRequest } from './claude-runner.mjs';
 import * as handoff from './handoff-release.mjs';
@@ -178,17 +179,13 @@ function allowedPaths(cwd, files) {
   return allowed;
 }
 function probeLogin(executable, context = {}) {
-  let output = '';
-  try {
-    output = execFileSync(executable, ['login', 'status'], {
-      encoding: 'utf8', timeout: 5000, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
-      env: { ...process.env, CODEX_HOME: context.codexHome },
-    });
-  } catch (error) {
-    output = String(error.stdout ?? '') + '\n' + String(error.stderr ?? '');
-    if (!/not logged in/i.test(output)) return { ready: false, reason: 'login-probe-failed' };
-  }
+  const result = spawnSync(executable, ['login', 'status'], {
+    encoding: 'utf8', timeout: 5000, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, CODEX_HOME: context.codexHome },
+  });
+  const output = String(result.stdout ?? '') + '\n' + String(result.stderr ?? '');
   if (/not logged in/i.test(output)) return { ready: false, reason: 'not-logged-in' };
+  if (result.status !== 0) return { ready: false, reason: 'login-probe-failed' };
   if (/logged in/i.test(output)) return { ready: true, reason: 'logged-in' };
   return { ready: false, reason: 'login-status-unknown' };
 }
@@ -297,11 +294,14 @@ export class CodingCoordinator {
     this.auditHashFileLimit = positiveInteger(options.auditHashFileLimit ?? 64 * 1024, 'auditHashFileLimit');
     this.runner = options.runner ?? runPeerRequest;
     this.locate = options.locate ?? locateCodex;
-    this.authMode = options.authMode ?? 'relay';
-    if (!['relay', 'login'].includes(this.authMode))
-      throw new TypeError('authMode must be relay or login');
-    this.authProbe = options.authProbe ?? (this.authMode === 'relay'
-      ? (_executable, context) => probeRelay(context.codexHome) : probeLogin);
+    this.authMode = options.authMode ?? 'auto';
+    if (!['auto', 'relay', 'login'].includes(this.authMode)) throw new TypeError('Unknown Codex authentication mode');
+    this.authProbe = options.authProbe ?? ((executable, context) => {
+      if (this.authMode === 'login') return probeLogin(executable, context);
+      const relay = probeRelay(context.codexHome);
+      return this.authMode === 'auto' && ['official-provider', 'relay-config-unavailable'].includes(relay.reason)
+        ? probeLogin(executable, context) : relay;
+    });
     const claudeMaxBudgetUsd = options.claudeMaxBudgetUsd ?? null;
     if (claudeMaxBudgetUsd !== null && (typeof claudeMaxBudgetUsd !== 'number' || !Number.isFinite(claudeMaxBudgetUsd)
       || claudeMaxBudgetUsd <= 0))
@@ -1100,6 +1100,7 @@ export class CodingCoordinator {
         answer: outcome.answer ?? '',
         startedAt: outcome.startedAt ?? attempt.startedAt,
         endedAt: outcome.endedAt ?? new Date().toISOString() });
+      if(outcome.status!=='completed')attempt.channelIssue=channelIssue([outcome.status,outcome.answer,JSON.stringify(outcome.errors??[])].join(' '));
       if(this.#wire)attempt.wire=outcome.wire;
       if(fresh){
         attempt.fresh={...attempt.fresh,...outcome.fresh};
