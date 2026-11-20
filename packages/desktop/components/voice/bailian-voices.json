@@ -1,0 +1,3638 @@
+{
+  "schema": 1,
+  "checkedAt": "2026-10-28T06:51:35.760506+00:00",
+  "sourceType": "official-system-voice-catalog-not-account-api",
+  "voices": [
+    {
+      "models": [
+        "qwen-audio-3.1-tts-plus",
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanlingxin_v3.1",
+      "label": "龙安灵心_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-plus",
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "xunanchuan_v3.1",
+      "label": "许南川",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-plus",
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanhuan_v3.1",
+      "label": "龙安欢_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-plus",
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanfengyue_v3.1",
+      "label": "龙安风悦_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "yuxiaoyun_v3.1",
+      "label": "于小云",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "qiaoxiaojiao_v3.1",
+      "label": "乔小娇",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "xiaxiaochen_v3.1",
+      "label": "夏小晨",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "anmingyuan_v3.1",
+      "label": "安明远",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "wenhuaiqing_v3.1",
+      "label": "温怀清",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "anxiaolan_v3.1",
+      "label": "安小岚",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "xieshurou_v3.1",
+      "label": "谢舒柔",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "baiqinglan_v3.1",
+      "label": "白清岚",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "xuyuyuan_v3.1",
+      "label": "许玉远",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "anruorou_v3.1",
+      "label": "安若柔",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "wenhuaizhi_v3.1",
+      "label": "闻怀之",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "xiaoxingzhi_v3.1",
+      "label": "萧行之",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "guyunshu_v3.1",
+      "label": "顾云舒",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "huozhuoshi_v3.1",
+      "label": "霍拙石",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "yeqinghe_v3.1",
+      "label": "叶清禾",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "yunhuanhuan_v3.1",
+      "label": "云欢欢",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "xuxiaoqiao_v3.1",
+      "label": "徐小俏",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "baianran_v3.1",
+      "label": "白安然",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "xuyanchu_v3.1",
+      "label": "许言初",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "yezhiqing_v3.1",
+      "label": "叶知晴",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "andi_v3.1",
+      "label": "安迪",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "anyuqing_v3.1",
+      "label": "安语晴",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Emily_v3.1",
+      "label": "Emily",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Luna_v3.1",
+      "label": "Luna",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Eric_v3.1",
+      "label": "Eric",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Luca_v3.1",
+      "label": "Luca",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Abby_v3.1",
+      "label": "Abby",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Annie_v3.1",
+      "label": "Annie",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Ava_v3.1",
+      "label": "Ava",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Beth_v3.1",
+      "label": "Beth",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Betty_v3.1",
+      "label": "Betty",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Cally_v3.1",
+      "label": "Cally",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Cindy_v3.1",
+      "label": "Cindy",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Donna_v3.1",
+      "label": "Donna",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Andy_v3.1",
+      "label": "Andy",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Brian_v3.1",
+      "label": "Brian",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "David_v3.1",
+      "label": "David",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanyuanfei_v3.1",
+      "label": "龙安元妃_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjielidou_v3.1",
+      "label": "龙杰力豆_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanlingxi_v3.1",
+      "label": "龙安灵希_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhuohuo_v3.1",
+      "label": "龙火火_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingtao_v3.1",
+      "label": "龙应桃_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanya_v3.1",
+      "label": "龙安雅_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longwan_v3.1",
+      "label": "龙婉_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxing_v3.1",
+      "label": "龙星_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhua_v3.1",
+      "label": "龙华_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhan_v3.1",
+      "label": "龙寒_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanzhi_v3.1",
+      "label": "龙安智_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longzhe_v3.1",
+      "label": "龙哲_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanyang_v3.1",
+      "label": "龙安洋_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "libai_v3.1",
+      "label": "李白_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longling_v3.1",
+      "label": "龙铃_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longniuniu_v3.1",
+      "label": "龙牛牛_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshanshan_v3.1",
+      "label": "龙闪闪_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longpaopao_v3.1",
+      "label": "龙泡泡_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongstella_v3.1",
+      "label": "loongstella_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyuan_v3.1",
+      "label": "龙媛_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longmiao_v3.1",
+      "label": "龙妙_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longsanshu_v3.1",
+      "label": "龙三叔_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanli_v3.1",
+      "label": "龙安莉_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanwen_v3.1",
+      "label": "龙安温_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanlang_v3.1",
+      "label": "龙安朗_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiaoxia_v3.1",
+      "label": "龙小夏_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen-audio-3.1-tts-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanchong_v3.1",
+      "label": "龙安冲_v3.1",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash",
+        "cosyvoice-v3-plus"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanyang",
+      "label": "龙安洋",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanhuan_v3",
+      "label": "龙安欢（V3）",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash",
+        "cosyvoice-v3-plus"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanhuan",
+      "label": "龙安欢",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longhuhu_v3",
+      "label": "龙呼呼",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longpaopao_v3",
+      "label": "龙泡泡",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longjielidou_v3",
+      "label": "龙杰力豆",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxian_v3",
+      "label": "龙仙",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longling_v3",
+      "label": "龙铃",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longshanshan_v3",
+      "label": "龙闪闪",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longniuniu_v3",
+      "label": "龙牛牛",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjiaxin_v3",
+      "label": "龙嘉欣",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjiayi_v3",
+      "label": "龙嘉怡",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanyue_v3",
+      "label": "龙安粤",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longlaotie_v3",
+      "label": "龙老铁",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longshange_v3",
+      "label": "龙陕哥",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanmin_v3",
+      "label": "龙安闽",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongkyong_v3",
+      "label": "loongkyong",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongriko_v3",
+      "label": "Riko",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongtomoka_v3",
+      "label": "loongtomoka",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongabby_v3",
+      "label": "loongabby",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "loongandy_v3",
+      "label": "loongandy",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongannie_v3",
+      "label": "loongannie",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongava_v3",
+      "label": "loongava",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongbeth_v3",
+      "label": "loongbeth",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongbetty_v3",
+      "label": "loongbetty",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongcally_v3",
+      "label": "loongcally",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongcindy_v3",
+      "label": "loongcindy",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongdavid_v3",
+      "label": "loongdavid",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongdonna_v3",
+      "label": "loongdonna",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongemily_v3",
+      "label": "loongemily",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongeric_v3",
+      "label": "loongeric",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongluna_v3",
+      "label": "loongluna",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongluca_v3",
+      "label": "loongluca",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongtomoya_v3",
+      "label": "loongtomoya",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongyuuna_v3",
+      "label": "Yuuna",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongyuuma_v3",
+      "label": "Yuuma",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongjihun_v3",
+      "label": "Jihun",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "loongindah_v3",
+      "label": "loongindah",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longfei_v3",
+      "label": "龙飞",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longyingxiao_v3",
+      "label": "龙应笑",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longyingxun_v3",
+      "label": "龙应询",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingjing_v3",
+      "label": "龙应静",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingling_v3",
+      "label": "龙应聆",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longyingtao_v3",
+      "label": "龙应桃",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiaochun_v3",
+      "label": "龙小淳",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiaoxia_v3",
+      "label": "龙小夏",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyumi_v3",
+      "label": "YUMI",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanyun_v3",
+      "label": "龙安昀",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanwen_v3",
+      "label": "龙安温",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanli_v3",
+      "label": "龙安莉",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanlang_v3",
+      "label": "龙安朗",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longyingmu_v3",
+      "label": "龙应沐",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longantai_v3",
+      "label": "龙安台",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longhua_v3",
+      "label": "龙华",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longcheng_v3",
+      "label": "龙橙",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longze_v3",
+      "label": "龙泽",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longzhe_v3",
+      "label": "龙哲",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyan_v3",
+      "label": "龙颜",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxing_v3",
+      "label": "龙星",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longtian_v3",
+      "label": "龙天",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longwan_v3",
+      "label": "龙婉",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longqiang_v3",
+      "label": "龙嫱",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longfeifei_v3",
+      "label": "龙菲菲",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhao_v3",
+      "label": "龙浩",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanrou_v3",
+      "label": "龙安柔",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhan_v3",
+      "label": "龙寒",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanzhi_v3",
+      "label": "龙安智",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanling_v3",
+      "label": "龙安灵",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanya_v3",
+      "label": "龙安雅",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanqin_v3",
+      "label": "龙安亲",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longmiao_v3",
+      "label": "龙妙",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longsanshu_v3",
+      "label": "龙三叔",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyuan_v3",
+      "label": "龙媛",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyue_v3",
+      "label": "龙悦",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiu_v3",
+      "label": "龙修",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longnan_v3",
+      "label": "龙楠",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longwanjun_v3",
+      "label": "龙婉君",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longyichen_v3",
+      "label": "龙逸尘",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longlaobo_v3",
+      "label": "龙老伯",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longlaoyi_v3",
+      "label": "龙老姨",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longjiqi_v3",
+      "label": "龙机器",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longhouge_v3",
+      "label": "龙猴哥",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longdaiyu_v3",
+      "label": "龙黛玉",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanran_v3",
+      "label": "龙安燃",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "longanxuan_v3",
+      "label": "龙安宣",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshuo_v3",
+      "label": "龙硕",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshu_v3",
+      "label": "龙书",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v3-flash"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongbella_v3",
+      "label": "Bella3.0",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingxiao",
+      "label": "龙应笑",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjiqi",
+      "label": "龙机器",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhouge",
+      "label": "龙猴哥",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjixin",
+      "label": "龙机心",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanyue",
+      "label": "龙安粤",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshange",
+      "label": "龙陕哥",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanmin",
+      "label": "龙安敏",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longdaiyu",
+      "label": "龙黛玉",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longgaoseng",
+      "label": "龙高僧",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanli",
+      "label": "龙安莉",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanlang",
+      "label": "龙安朗",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanwen",
+      "label": "龙安温",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanyun",
+      "label": "龙安昀",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyumi_v2",
+      "label": "YUMI",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiaochun_v2",
+      "label": "龙小淳",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiaoxia_v2",
+      "label": "龙小夏",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyichen",
+      "label": "龙逸尘",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longwanjun",
+      "label": "龙婉君",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longlaobo",
+      "label": "龙老伯",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longlaoyi",
+      "label": "龙老姨",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longbaizhi",
+      "label": "龙白芷",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longsanshu",
+      "label": "龙三叔",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiu_v2",
+      "label": "龙修",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longmiao_v2",
+      "label": "龙妙",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyue_v2",
+      "label": "龙悦",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longnan_v2",
+      "label": "龙楠",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyuan_v2",
+      "label": "龙媛",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanqin",
+      "label": "龙安亲",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanya",
+      "label": "龙安雅",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanshuo",
+      "label": "龙安朔",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanling",
+      "label": "龙安灵",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanzhi",
+      "label": "龙安智",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanrou",
+      "label": "龙安柔",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longqiang_v2",
+      "label": "龙嫱",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhan_v2",
+      "label": "龙寒",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxing_v2",
+      "label": "龙星",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhua_v2",
+      "label": "龙华",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longwan_v2",
+      "label": "龙婉",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longcheng_v2",
+      "label": "龙橙",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longfeifei_v2",
+      "label": "龙菲菲",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiaocheng_v2",
+      "label": "龙小诚",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longzhe_v2",
+      "label": "龙哲",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyan_v2",
+      "label": "龙颜",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longtian_v2",
+      "label": "龙天",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longze_v2",
+      "label": "龙泽",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshao_v2",
+      "label": "龙邵",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhao_v2",
+      "label": "龙浩",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "kabuleshen_v2",
+      "label": "龙深",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longhuhu",
+      "label": "龙呼呼",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanpei",
+      "label": "龙安培",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longwangwang",
+      "label": "龙汪汪",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longpaopao",
+      "label": "龙泡泡",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshanshan",
+      "label": "龙闪闪",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longniuniu",
+      "label": "龙牛牛",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingmu",
+      "label": "龙应沐",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingxun",
+      "label": "龙应询",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingcui",
+      "label": "龙应催",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingda",
+      "label": "龙应答",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingjing",
+      "label": "龙应静",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingyan",
+      "label": "龙应严",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingtian",
+      "label": "龙应甜",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingbing",
+      "label": "龙应冰",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingtao",
+      "label": "龙应桃",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longyingling",
+      "label": "龙应聆",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanran",
+      "label": "龙安燃",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanxuan",
+      "label": "龙安宣",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanchong",
+      "label": "龙安冲",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longanping",
+      "label": "龙安萍",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjielidou_v2",
+      "label": "龙杰力豆",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longling_v2",
+      "label": "龙铃",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longke_v2",
+      "label": "龙可",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxian_v2",
+      "label": "龙仙",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longlaotie_v2",
+      "label": "龙老铁",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjiayi_v2",
+      "label": "龙嘉怡",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longtao_v2",
+      "label": "龙桃",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longfei_v2",
+      "label": "龙飞",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "libai_v2",
+      "label": "李白",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjin_v2",
+      "label": "龙津",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshu_v2",
+      "label": "龙书",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongbella_v2",
+      "label": "Bella2.0",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longshuo_v2",
+      "label": "龙硕",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longxiaobai_v2",
+      "label": "龙小白",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "longjing_v2",
+      "label": "龙婧",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongstella_v2",
+      "label": "loongstella",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongyuuna_v2",
+      "label": "loongyuuna",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongyuuma_v2",
+      "label": "loongyuuma",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongjihun_v2",
+      "label": "loongjihun",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongeva_v2",
+      "label": "loongeva",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongbrian_v2",
+      "label": "loongbrian",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongluna_v2",
+      "label": "loongluna",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongluca_v2",
+      "label": "loongluca",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongemily_v2",
+      "label": "loongemily",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongeric_v2",
+      "label": "loongeric",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongabby_v2",
+      "label": "loongabby",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongannie_v2",
+      "label": "loongannie",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongandy_v2",
+      "label": "loongandy",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongava_v2",
+      "label": "loongava",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongbeth_v2",
+      "label": "loongbeth",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongbetty_v2",
+      "label": "loongbetty",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongcindy_v2",
+      "label": "loongcindy",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongcally_v2",
+      "label": "loongcally",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongdavid_v2",
+      "label": "loongdavid",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongdonna_v2",
+      "label": "loongdonna",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongkyong_v2",
+      "label": "loongkyong",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongtomoka_v2",
+      "label": "loongtomoka",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "cosyvoice-v2"
+      ],
+      "regions": [
+        "beijing"
+      ],
+      "id": "loongtomoya_v2",
+      "label": "loongtomoya",
+      "source": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Cherry",
+      "label": "芊悦",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Serena",
+      "label": "苏瑶",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Ethan",
+      "label": "晨煦",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Chelsie",
+      "label": "千雪",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Momo",
+      "label": "茉兔",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Vivian",
+      "label": "十三",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Moon",
+      "label": "月白",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Maia",
+      "label": "四月",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Kai",
+      "label": "凯",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Nofish",
+      "label": "不吃鱼",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Bella",
+      "label": "萌宝",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Jennifer",
+      "label": "詹妮弗",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Ryan",
+      "label": "甜茶",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Katerina",
+      "label": "卡捷琳娜",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Aiden",
+      "label": "艾登",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Eldric Sage",
+      "label": "沧明子",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Mia",
+      "label": "乖小妹",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Mochi",
+      "label": "沙小弥",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Bellona",
+      "label": "燕铮莺",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Vincent",
+      "label": "田叔",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Bunny",
+      "label": "萌小姬",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Neil",
+      "label": "阿闻",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Elias",
+      "label": "墨讲师",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Arthur",
+      "label": "徐大爷",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Nini",
+      "label": "邻家妹妹",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Seren",
+      "label": "小婉",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Pip",
+      "label": "顽屁小孩",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Stella",
+      "label": "少女阿月",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Bodega",
+      "label": "博德加",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Sonrisa",
+      "label": "索尼莎",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Alek",
+      "label": "阿列克",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Dolce",
+      "label": "多尔切",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Sohee",
+      "label": "素熙",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Ono Anna",
+      "label": "小野杏",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Lenn",
+      "label": "莱恩",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Emilien",
+      "label": "埃米尔安",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Andre",
+      "label": "安德雷",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Radio Gol",
+      "label": "拉迪奥·戈尔",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Jada",
+      "label": "上海-阿珍",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Dylan",
+      "label": "北京-晓东",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Li",
+      "label": "南京-老李",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Marcus",
+      "label": "陕西-秦川",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Roy",
+      "label": "闽南-阿杰",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Peter",
+      "label": "天津-李彼得",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Sunny",
+      "label": "四川-晴儿",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Eric",
+      "label": "四川-程川",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Rocky",
+      "label": "粤语-阿强",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    },
+    {
+      "models": [
+        "qwen3-tts-flash"
+      ],
+      "regions": [
+        "beijing",
+        "singapore"
+      ],
+      "id": "Kiki",
+      "label": "粤语-阿清",
+      "source": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list"
+    }
+  ],
+  "countsByModel": {
+    "qwen-audio-3.1-tts-plus": 4,
+    "qwen-audio-3.1-tts-flash": 68,
+    "cosyvoice-v3-flash": 88,
+    "cosyvoice-v3-plus": 2,
+    "cosyvoice-v2": 106,
+    "qwen3-tts-flash": 48
+  },
+  "countsByModelAndRegion": {
+    "qwen-audio-3.1-tts-plus": {
+      "beijing": 4,
+      "singapore": 4
+    },
+    "qwen-audio-3.1-tts-flash": {
+      "beijing": 68,
+      "singapore": 19
+    },
+    "cosyvoice-v3-flash": {
+      "beijing": 88,
+      "singapore": 32
+    },
+    "cosyvoice-v3-plus": {
+      "beijing": 2,
+      "singapore": 2
+    },
+    "cosyvoice-v2": {
+      "beijing": 106,
+      "singapore": 0
+    },
+    "qwen3-tts-flash": {
+      "beijing": 48,
+      "singapore": 48
+    }
+  },
+  "extractionChecks": [
+    {
+      "source": "qwenAudio",
+      "table": 0,
+      "model": "qwen-audio-3.1-tts-plus",
+      "rows": 4
+    },
+    {
+      "source": "qwenAudio",
+      "table": 1,
+      "model": "qwen-audio-3.1-tts-flash",
+      "rows": 4
+    },
+    {
+      "source": "qwenAudio",
+      "table": 2,
+      "model": "qwen-audio-3.1-tts-flash",
+      "rows": 22
+    },
+    {
+      "source": "qwenAudio",
+      "table": 3,
+      "model": "qwen-audio-3.1-tts-flash",
+      "rows": 15
+    },
+    {
+      "source": "qwenAudio",
+      "table": 4,
+      "model": "qwen-audio-3.1-tts-flash",
+      "rows": 27
+    },
+    {
+      "source": "cosy",
+      "table": 0,
+      "model": "cosyvoice-v3-flash",
+      "rows": 88
+    },
+    {
+      "source": "cosy",
+      "table": 1,
+      "model": "cosyvoice-v3-plus",
+      "rows": 2
+    },
+    {
+      "source": "cosy",
+      "table": 2,
+      "model": "cosyvoice-v2",
+      "rows": 106
+    },
+    {
+      "source": "qwen3",
+      "table": 1,
+      "model": "qwen3-tts-flash",
+      "rows": 48
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list",
+      "sha256": "63968456c87aadf008be881fc7d8caad1af710163abd49edc44f4c495174d78c"
+    },
+    {
+      "url": "https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list",
+      "sha256": "399f99a7c28a7c93269d60a93e38084fdb6540a4fd116ec314972297a52cd5ba"
+    },
+    {
+      "url": "https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list",
+      "sha256": "9d31e16f6caf2c9a422d9b9c4e1a71db6d573956e1bd01a1a7537f16720b81bf"
+    }
+  ],
+  "notes": [
+    "Qwen-Audio 3.1 Flash multilingual/dialect and premium English groups support Beijing and Singapore; other groups are Beijing only.",
+    "Qwen-Audio 3.1 Plus and Qwen3-TTS-Flash region applicability checked against official model/non-realtime TTS guides.",
+    "CosyVoice region values are taken from each voice row; regional voice existence does not establish HTTP protocol availability.",
+    "Exact stable model IDs only; date-suffixed aliases and instruct/realtime/custom-voice model variants are not inferred.",
+    "CosyVoice v3.5 models are intentionally absent: official guide lists no system voices.",
+    "Audio demo links and demo texts are not copied."
+  ],
+  "supportingSources": [
+    "https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide",
+    "https://help.aliyun.com/zh/model-studio/models"
+  ]
+}

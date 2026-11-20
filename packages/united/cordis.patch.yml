@@ -1,0 +1,8 @@
+# 云舒联合体 · 任务台：bundle 声明
+#
+# 这一行是把插件插进 DSH 的入口。
+# 没有它，DSH 会说这个包「不是 bundle」（error: not-bundle）。
+
+- insert:
+    - id: yunshu-united
+      name: "@yunshu/dsh-united"

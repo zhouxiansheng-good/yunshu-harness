@@ -1,0 +1,59 @@
+{
+  "part_id": "explorer",
+  "objective": "产生可被反驳的候选方案与证据，不落地执行",
+  "executor": {
+    "kind": "process",
+    "command": "runner.mjs constructs codex exec -C run/artifacts -m gpt-6.1-sol -s read-only --json --output-schema bin/model-result.schema.json -o run/attempts/attempt_id/model-output.json -",
+    "model": "gpt-6.1-sol",
+    "provider": "codex-relay"
+  },
+  "output_contract": {
+    "final": "runs/run_id/attempts/attempt_id/model-output.json (model-result.schema.json)",
+    "events": "runs/run_id/attempts/attempt_id/stdout.jsonl (Codex JSONL)",
+    "receipt": "runs/run_id/receipts/message_id.json (receipt-v1.schema.json)"
+  },
+  "allowed_tools": [
+    "read",
+    "grep",
+    "glob",
+    "web_fetch"
+  ],
+  "forbidden_actions": [
+    "写文件",
+    "写磁盘",
+    "删除文件",
+    "改生产配置",
+    "git push",
+    "调用外部付费接口"
+  ],
+  "input_schema": {
+    "requires": [
+      "task.objective",
+      "task.acceptance"
+    ]
+  },
+  "output_schema": {
+    "deliverables": [
+      "finding"
+    ],
+    "must_include": [
+      "claim.statement",
+      "claim.evidence",
+      "confidence.p"
+    ]
+  },
+  "veto_scope": null,
+  "memory_scope": "run-scoped-auditable",
+  "trigger": {
+    "when": "用户提出需要探索/诊断/找路的问题",
+    "phase": "explore"
+  },
+  "budget": {
+    "turns": 1,
+    "minutes": 20,
+    "max_findings": 3
+  },
+  "preferred_provider": "codex",
+  "fallback_provider": "dsh-subagent",
+  "enforcement": "由执行器强制：-s read-only（只读沙箱）；骨架不代跑，只声明与校验"
+}

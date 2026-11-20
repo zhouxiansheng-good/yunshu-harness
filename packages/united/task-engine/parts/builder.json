@@ -1,0 +1,63 @@
+{
+  "part_id": "builder",
+  "objective": "按冻结的任务单执行，产出可验证的产物；不自评完成",
+  "executor": {
+    "kind": "process",
+    "command": "runner.mjs constructs codex exec -C run/artifacts -m gpt-6.1-sol -s workspace-write --json --output-schema bin/model-result.schema.json -o run/attempts/attempt_id/model-output.json -",
+    "model": "gpt-6.1-sol",
+    "provider": "codex-relay",
+    "env": {
+      "policy": "inherit HTTP_PROXY/HTTPS_PROXY/ALL_PROXY and readable CODEX_HOME from runner; never set dead proxy"
+    }
+  },
+  "output_contract": {
+    "final": "runs/run_id/attempts/attempt_id/model-output.json (model-result.schema.json)",
+    "events": "runs/run_id/attempts/attempt_id/stdout.jsonl (Codex JSONL)",
+    "receipt": "runs/run_id/receipts/message_id.json (receipt-v1.schema.json)",
+    "artifacts": "runs/run_id/artifacts"
+  },
+  "allowed_tools": [
+    "read",
+    "write",
+    "edit",
+    "pwsh"
+  ],
+  "forbidden_actions": [
+    "改 goal.json",
+    "改 acceptance",
+    "git push",
+    "联网（curl / git fetch / npm install）",
+    "改 DSH 本体或 profile"
+  ],
+  "input_schema": {
+    "requires": [
+      "task.objective",
+      "task.acceptance",
+      "task.constraints"
+    ]
+  },
+  "output_schema": {
+    "deliverables": [
+      "finding",
+      "blocked"
+    ],
+    "must_include": [
+      "evidence[].sha256",
+      "receipt.exit_code"
+    ]
+  },
+  "veto_scope": null,
+  "memory_scope": "run-scoped-auditable",
+  "trigger": {
+    "when": "已有明确的执行任务单",
+    "phase": "build"
+  },
+  "budget": {
+    "turns": 2,
+    "minutes": 30
+  },
+  "preferred_provider": "codex",
+  "fallback_provider": "dsh-subagent",
+  "enforcement": "Runner 以 run/artifacts 为 Codex -C 工作目录；workspace-write 为写入沙箱。代理用于模型控制面连接；对执行器的网络禁用尚未强制，netgrep 仅事后检查，不能声称阻断直连。",
+  "verify_after": "node bin/netgrep.mjs <run目录> —— 退出码 0 才算合规"
+}

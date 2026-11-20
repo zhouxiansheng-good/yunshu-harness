@@ -1,0 +1,9 @@
+[
+  {
+    "package": "desktop",
+    "path": "components/memory/assets/bge-m3/onnx/model_int8.onnx",
+    "sha256": "a206e10e995aa2a833924bcd725ba5dd6c3425cd34bac3cf2b5677cd2a1c51d6",
+    "bytes": 568456694,
+    "url": "https://huggingface.co/Xenova/bge-m3/resolve/4de13258303883538bd53b696b452bf8099f0858/onnx/model_int8.onnx"
+  }
+]

@@ -1,0 +1,5 @@
+eSpeak NG 1.52.0
+https://github.com/espeak-ng/espeak-ng/tree/1.52.0
+Windows binary: official espeak-ng.msi, SHA256 7f673c709ea5dd579d3b5ebb98688cc575328a6ab7438d2bc405b88cedaeafb9
+Complete upstream source: espeak-ng-1.52.0-source.tar.gz
+No modifications. Invoked as a separate command-line process.

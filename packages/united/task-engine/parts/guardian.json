@@ -1,0 +1,68 @@
+{
+  "part_id": "guardian",
+  "objective": "独立验收：只按冻结的验收标准核对产物，可行使局部否决",
+  "executor": {
+    "kind": "subagent",
+    "command": "runner.mjs constructs dsh --profile headless --permission-mode read-only --json -",
+    "provider": "dsh",
+    "model": "deepseek",
+    "note": "必须有工具执行能力才能做机械复算。2026-11-12 实测：Claude 经 /v1/messages 调用时没有命令执行工具，会诚实拒绝伪造哈希，因此它只能做逻辑审查，不能做复算。"
+  },
+  "output_contract": {
+    "events": "runs/run_id/attempts/attempt_id/stdout.jsonl (DSH JSONL, final.text is JSON)",
+    "final": "runs/run_id/attempts/attempt_id/model-output.json (parsed final.text)",
+    "receipt": "runs/run_id/receipts/message_id.json (receipt-v1.schema.json)",
+    "must_observe": "tool_call subagent in DSH JSONL before Guardian finding is accepted"
+  },
+  "allowed_tools": [
+    "read",
+    "grep",
+    "glob",
+    "pwsh(readonly)",
+    "netgrep"
+  ],
+  "forbidden_actions": [
+    "修改产物",
+    "改验收标准",
+    "代替 builder 重做"
+  ],
+  "input_schema": {
+    "requires": [
+      "task.acceptance",
+      "context.artifact_refs"
+    ]
+  },
+  "output_schema": {
+    "deliverables": [
+      "finding",
+      "objection",
+      "incident"
+    ],
+    "must_include": [
+      "claim.statement",
+      "claim.evidence"
+    ]
+  },
+  "veto_scope": [
+    "acceptance_violation",
+    "false_completion",
+    "network_violation",
+    "echo_not_verification"
+  ],
+  "memory_scope": "run-scoped-auditable",
+  "trigger": {
+    "when": "builder 交付或出现 incident",
+    "phase": "verify"
+  },
+  "budget": {
+    "turns": 1,
+    "minutes": 15
+  },
+  "preferred_provider": "dsh-subagent",
+  "fallback_provider": "mechanical-check-script",
+  "enforcement": "独立上下文 + 必须真跑 pwsh 复算；禁止把被验方声称的哈希当复算结果",
+  "counterpart": {
+    "logic_reviewer": "claude (via comms --to claude)",
+    "note": "Claude 仅做标准与逻辑挑错，不复算、不签通过"
+  }
+}

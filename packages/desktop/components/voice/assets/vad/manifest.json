@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "modelVersion": "6.2.3",
+  "runtimeVersion": "1.27.0",
+  "files": {
+    "silero_vad.onnx": {
+      "bytes": 2327524,
+      "sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3"
+    },
+    "ort.wasm.min.js": {
+      "bytes": 50139,
+      "sha256": "ea3a767b15df7dbe3d695ec9c182ca0f15b2ce7750156c6b70276e11c28997f0"
+    },
+    "ort-wasm-simd-threaded.mjs": {
+      "bytes": 24180,
+      "sha256": "0a1e718d99c41b22c21f2520ff4f9e883a6b5533856e398d21816ee8eb8185d3"
+    },
+    "ort-wasm-simd-threaded.wasm": {
+      "bytes": 13479978,
+      "sha256": "d1ab1b94b16a65b29d710d0b587b29e7bed336827577623913479b8afe8113e6"
+    }
+  },
+  "sourceChecks": [
+    {
+      "source": "https://raw.githubusercontent.com/snakers4/silero-vad/v6.2.3/src/silero_vad/data/silero_vad.onnx",
+      "sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3",
+      "matchesLocal": true
+    },
+    {
+      "source": "https://raw.githubusercontent.com/snakers4/silero-vad/v6.2.3/LICENSE",
+      "bytes": 1075
+    },
+    {
+      "source": "https://raw.githubusercontent.com/microsoft/onnxruntime/v1.27.0/LICENSE",
+      "bytes": 1073
+    },
+    {
+      "source": "https://registry.npmjs.org/onnxruntime-web/-/onnxruntime-web-1.27.0.tgz#package/dist/ort.wasm.min.js",
+      "sha256": "ea3a767b15df7dbe3d695ec9c182ca0f15b2ce7750156c6b70276e11c28997f0",
+      "matchesLocal": true
+    },
+    {
+      "source": "https://registry.npmjs.org/onnxruntime-web/-/onnxruntime-web-1.27.0.tgz#package/dist/ort-wasm-simd-threaded.mjs",
+      "sha256": "0a1e718d99c41b22c21f2520ff4f9e883a6b5533856e398d21816ee8eb8185d3",
+      "matchesLocal": true
+    },
+    {
+      "source": "https://registry.npmjs.org/onnxruntime-web/-/onnxruntime-web-1.27.0.tgz#package/dist/ort-wasm-simd-threaded.wasm",
+      "sha256": "d1ab1b94b16a65b29d710d0b587b29e7bed336827577623913479b8afe8113e6",
+      "matchesLocal": true
+    }
+  ]
+}
