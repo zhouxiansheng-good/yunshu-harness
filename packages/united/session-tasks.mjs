@@ -236,7 +236,8 @@ export async function registerSessionTasks(ctx,engineFor) {
     }
     const view=p.action==='report'?roleView(t):await runRoleFlow(t,agent,ctx.get('yunshuControl')?.taskWorkers,
       {signal,retry:p.action==='resume',journal:roleJournal(root,t.id,agent.session.header.cwd)});
-    const result={id:t.id,runId:t.id,parentId:view.parentId,phase:view.phase,reason:view.reason,childId:view.childId,
+    const result={id:t.id,runId:t.id,parentId:view.parentId,phase:view.phase,stage:view.stage,
+      canRetry:view.canRetry,reason:view.reason,childId:view.childId,
       nextAction:view.phase==='changes_requested'?'rework':view.phase==='approved'?'report_to_user':'status_only'};
     if(view.phase==='changes_requested')result.review=view.review;
     if(view.phase==='approved' || p.action==='report' && view.phase==='reported') {

@@ -94,14 +94,6 @@ export default class YunshuControl extends TypertRemoteService {
         const r=await service.request(exec.agent,'media-library-list',{},exec.signal);
         return {attachments:r.items.map(({name,role,mime,bytes,digest,id,part})=>({name,role,mime,bytes,digest,sourceId:id,part}))};
       }}),()=>!!ctx.get('yunshuMedia'));
-    featureTool(ctx,defineTool({name:'yunshu_task_current',description:'Read goals, acceptance criteria, requested files and progress of tasks belonging to this exact conversation. Read only.',
-      parameters:{},output,execute:async(_args,exec)=>{
-        const board=await ctx.get('yunshuUnited').request(exec.agent,'board',{limit:40},exec.signal);
-        return {plan:board.chatPlan??null,tasks:board.tasks.map(t=>({id:t.id,goal:t.goal,phase:t.native?.phase??t.status,
-          acceptance:t.native?.acceptance??null,target:t.native?.target??null,receipt:t.native?.receipt??null,
-          parentId:t.native?.parentId,childId:t.native?.childId,plan:t.native?.plan?.steps,review:t.native?.review,
-          deliverables:t.native?.evidence?.files,reason:t.native?.reason}))};
-      }}),()=>!!ctx.get('yunshuUnited'));
   }
   enabled(key) { return enabled(key); }
   explain(error) { return workflowReason(error); }

@@ -306,7 +306,9 @@ function SessionTaskBoard({React,sessionId,data,call,refresh}) {
           (v.workflow && (v.evidence||v.plan)||['review','done'].includes(v.phase)) && button('查看回执',()=>act('preview'))),
         v.parentId&&h('p',null,'整改自 ',button(v.parentId.slice(-8),()=>{select(v.parentId);setRead(null);})),
         v.childId&&h('p',null,'整改工单 ',button(v.childId.slice(-8),()=>{select(v.childId);setRead(null);})),
-        v.reason&&h('p',{role:'status'},v.reason),
+        v.reason&&h('p',{role:'status'},v.phase==='blocked' && v.stage
+          ? [({plan:'Claude 规划',execute:'Codex 执行',review:'Claude 审核'})[v.stage],v.reason].filter(Boolean).join(' · ')
+          : v.reason),
         v.plan?.steps?.length>0&&h('details',null,h('summary',null,'Claude 的规划'),h('ol',null,...v.plan.steps.map((line,i)=>h('li',{key:i},line)))),
         v.review&&h('div',null,h('strong',null,'Claude 审核'),h('p',null,v.review.summary),
           v.review.issues?.length>0&&h('ul',null,...v.review.issues.map((line,i)=>h('li',{key:i},line)))),

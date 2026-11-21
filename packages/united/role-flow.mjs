@@ -72,7 +72,7 @@ export function roleView(t) {
   if (pending.includes(phase) && !locked(t)) {
     phase='interrupted'; reason='上次运行中断，请核对执行回执后接续。';
   }
-  return {id:t.id,workflow:roleVersion,phase,reason,parentId:flow.parentId,childId:flow.childId??null,
+  return {id:t.id,workflow:roleVersion,phase,reason,parentId:flow.parentId??null,childId:flow.childId??null,
     stage:flow.stage??null, plan:flow.plan??null, evidence:flow.evidence??null, review:flow.review??null,
     report:flow.report??null, corrections:flow.corrections??[],receipt:flow.review?.runId??flow.evidence?.runId??null,
     canRetry:phase==='blocked' && flow.retryable===true || phase==='interrupted',

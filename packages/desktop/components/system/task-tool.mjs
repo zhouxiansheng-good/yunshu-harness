@@ -4,6 +4,21 @@ import { featureTool } from './policy.mjs';
 export function registerTaskPlan(ctx){
   const output={schema:{type:'json'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]};
   featureTool(ctx,defineTool({
+    name:'yunshu_task_current',
+    description:'Read goals, acceptance criteria, stage, last failure and available receipts in this conversation. Reading a blocked ticket never retries it.',
+    parameters:{},output,execute:async(_args,exec)=>{
+      const board=await ctx.get('yunshuUnited').request(exec.agent,'board',{limit:40},exec.signal);
+      return {plan:board.chatPlan??null,tasks:board.tasks.map(({id,goal,status,native})=>({
+        id,goal,phase:native?.phase??status,stage:native?.stage??null,
+        acceptance:native?.acceptance??null,target:native?.target??null,
+        parentId:native?.parentId??null,childId:native?.childId??null,
+        plan:native?.plan?.steps??[],deliverables:native?.evidence?.files??[],
+        receipt:native?.receipt??null,review:native?.review??null,
+        reason:native?.reason??null,canRetry:native?.canRetry===true
+      }))};
+    }
+  }),()=>Boolean(ctx.get('yunshuUnited')));
+  featureTool(ctx,defineTool({
     name:'yunshu_task_plan',
     description:'DeepSeek is the dispatcher. Save an incomplete brief with clarify. When the requested work and acceptance criteria are clear, dispatch once. Claude Code plans, GPT via Codex executes, and a fresh Claude Code session reviews the actual delivery. Follow the returned nextAction. For changes_requested call yunshu_task_route with rework and this runId. For report_to_user give the reviewed deliverables, findings and report.code in a visible reply. A blocked or paused ticket stays with its assigned worker.',
     timeoutMs:3600000,

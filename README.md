@@ -1,6 +1,6 @@
 # 云舒 · DeepSeek Harness
 
-云舒把长期记忆和任务派单接到 DeepSeek Harness 的主聊天。你可以先和 DeepSeek 商量目标，确定验收标准，再让它派单。R40 的工单由 DeepSeek 建立并派发，Claude Code 规划，GPT 经 Codex 执行，再由独立的 Claude Code 会话审核。审核退回时，DeepSeek 带上原标准和整改意见重开关联工单。通过后，DeepSeek 在主聊天交付结果。
+云舒把长期记忆和任务派单接到 DeepSeek Harness 的主聊天。你可以先和 DeepSeek 商量目标，确定验收标准，再让它派单。工单由 DeepSeek 建立并派发，Claude Code 规划，GPT 经 Codex 执行，再由独立的 Claude Code 会话审核。审核退回时，DeepSeek 带上原标准和整改意见重开关联工单。通过后，DeepSeek 在主聊天交付结果。
 
 [下载最新公开安装包和校验值](https://github.com/zhouxiansheng-good/yunshu-harness/releases/latest)
 
@@ -41,6 +41,6 @@
 python scripts/build.py
 ```
 
-生成文件为 `dist/Yunshu-R40-Windows-x64.zip`。已有模型时可传 `--bge-model` 和 `--speech-models` 进行离线构建。使用 `Install-Yunshu.ps1 -Action Check` 可在安装前验证宿主、两个插件包和语音模型。卸载使用 `Install-Yunshu.ps1 -Action Remove`，卸载后可继续使用原有 Harness 会话。
+生成文件为 `dist/Yunshu-R41-Windows-x64.zip`。已有模型时可传 `--bge-model` 和 `--speech-models` 进行离线构建。使用 `Install-Yunshu.ps1 -Action Check` 可在安装前验证宿主、两个插件包和语音模型。卸载使用 `Install-Yunshu.ps1 -Action Remove`，卸载后可继续使用原有 Harness 会话。
 
 云舒自有代码以 MIT 许可证开放。模型、语音工具及其他第三方组件的来源和许可见 [第三方说明](THIRD_PARTY_NOTICES.md)。

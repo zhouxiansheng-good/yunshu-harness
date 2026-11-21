@@ -1,6 +1,6 @@
 {
   "name": "@yunshu/dsh-united",
-  "version": "0.2.1-preview.10",
+  "version": "0.2.1-preview.11",
   "description": "云舒联合体任务台：看谁接了活、做到哪、交回什么、哪里坏了该谁修",
   "author": "云舒",
   "type": "module",
@@ -65,5 +65,5 @@
       "optional": true
     }
   },
-  "yunshuRelease": "avalon-r40"
+  "yunshuRelease": "avalon-r41"
 }

@@ -14,7 +14,6 @@ export function claudeArgs(request, config) {
   if (config.model) args.push('--model', config.model);
   if (config.maxBudgetUsd) args.push('--max-budget-usd', String(config.maxBudgetUsd));
   if (request.resumeThreadId) args.push('--resume', request.resumeThreadId);
-  args.push(request.prompt);
   return args;
 }
 
@@ -48,21 +47,28 @@ export function parseClaudeResult(stdout, exitCode = 0) {
 
 export async function runClaudeRequest(config, request, context = {}) {
   const startedAt = new Date().toISOString();
+  if (typeof request.prompt !== 'string' || !request.prompt.trim()) throw Error('工单缺少要交给 Claude Code 的正文。');
   const args = claudeArgs(request, config);
   let stdout, exitCode = 0;
   try {
-    const result = await execFileAsync(config.path, args, {
+    const running = execFileAsync(config.path, args, {
       cwd: request.cwd, env: { ...process.env, CLAUDE_CONFIG_DIR: config.home },
       windowsHide: true, signal: context.signal, timeout: config.runTimeoutMs,
       maxBuffer: 4 * 1024 * 1024,
     });
+    // --tools consumes following positional arguments. Print mode reads UTF-8 through EOF.
+    let inputError;
+    running.child.stdin.on('error', error => { inputError = error; });
+    running.child.stdin.end(request.prompt, 'utf8');
+    const result = await running;
+    if (inputError) throw inputError;
     stdout = result.stdout;
   } catch (error) {
     if (context.signal?.aborted) throw error;
     stdout = error.stdout;
     exitCode = typeof error.code === 'number' ? error.code : 1;
     if (!stdout) {
-      const issue=channelIssue(error.stderr||error.code);
+      const issue=channelIssue(error.killed ? 'ETIMEDOUT' : error.stderr?.trim() || error.code);
       throw Error(issue.reason+issue.action);
     }
   }

@@ -1,4 +1,4 @@
-"""Build the complete R40 Windows ZIP. Requires Python 3.11+ and Node.js 20+."""
+"""Build the complete R41 Windows ZIP. Requires Python 3.11+ and Node.js 20+."""
 import argparse
 import gzip
 import hashlib
@@ -67,7 +67,7 @@ def bundle(folder, output):
         staged.unlink(missing_ok=True)
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=ROOT/'dist/Yunshu-R40-Windows-x64.zip')
+    parser.add_argument('--output', type=Path, default=ROOT/'dist/Yunshu-R41-Windows-x64.zip')
     parser.add_argument('--cache', type=Path, default=ROOT/'.build-cache')
     parser.add_argument('--bge-model', type=Path, help='Optional verified local model_int8.onnx')
     parser.add_argument('--speech-models', type=Path, help='Optional model directory containing silero and sensevoice-onnx')
@@ -118,7 +118,7 @@ def main():
             dest = stage/'models'/row['path']
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(f, dest)
-        manifest = dict(version='r40-personal' if args.background_music else 'r40-public', hostVersion='0.2.2-rc.1', packages=packages, speech=speech)
+        manifest = dict(version='r41-personal' if args.background_music else 'r41-public', hostVersion='0.2.2-rc.1', packages=packages, speech=speech)
         (stage/'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n','utf8')
         bundle(stage, args.output)
     print(args.output, sha(args.output), flush=True)

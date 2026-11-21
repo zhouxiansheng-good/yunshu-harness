@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { existsSync,mkdirSync,readFileSync,renameSync,writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { executeToolBatch } from '@deepseek-ai/dsh-tools/pipeline';
+import { toolFailure } from '../system/channel-status.mjs';
 
 const need=(ok,msg)=>{if(!ok)throw Error(msg);};
 const read=file=>JSON.parse(readFileSync(file,'utf8'));
@@ -64,7 +65,7 @@ export function taskChannels(ctx,pipeline,coordinator) {
             {type:'tool-call',id,name:tool,arguments:JSON.stringify(request.args)}
           ]},pipeline,()=>1);
           const reply=results[0]?.result;
-          if(reply?.isError)throw Error(reply.content?.find(x=>x.type==='text')?.text||'渠道调用失败。');
+          if(reply?.isError)throw toolFailure(reply,'渠道调用失败。');
           const value=reply?.value;
           need(value?.capability===request.id && Array.isArray(value.artifacts),'渠道没有交回可核对的产物回执。');
           const receipt={channel:request.id,name:selected.find(x=>x.id===request.id).name,callId:id,summary:value.summary,artifacts:value.artifacts};

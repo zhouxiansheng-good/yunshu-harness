@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { defineTool } from '@deepseek-ai/dsh-tools';
 import { ToolExecutionPipeline, executeToolBatch } from '@deepseek-ai/dsh-tools/pipeline';
 import { enabled, requireFeature } from '../system/policy.mjs';
+import { toolFailure } from '../system/channel-status.mjs';
 import { makeRoleWorker } from './role-worker.mjs';
 import { taskChannels } from './task-channels.mjs';
 
@@ -35,20 +36,20 @@ export function installRoleTransport(ctx, coordinator) {
       requireFeature('tasks'); requireFeature('coding');
       const context = {agent,modelSelection:agent.model.current(),signal};
       admissions.add(context);
-      const toolSet = await ctx.tools.resolve(context);
       const id = randomUUID();
+      let toolSet;
       try {
+        toolSet = await ctx.tools.resolve(context);
         calls.set(id,{agent,stage,task});
         const {results} = await executeToolBatch({agent,toolSet,signal,calls:[
           {type:'tool-call',id,name,arguments:JSON.stringify({runId:task.id,stage})}
         ]},pipeline,()=>1);
         const result = results.find(entry=>entry.callId===id)?.result;
         if (!result || result.isError || !result.value) {
-          const message = result?.content?.find(v=>v.type==='text')?.text;
-          throw Error(message?.slice(0,500) || '执行器没有交回结果，请核对权限与连接。');
+          throw toolFailure(result,'执行器没有交回结果，请核对权限与连接。');
         }
         return result.value;
-      } finally { calls.delete(id); admissions.delete(context); toolSet.dispose(); }
+      } finally { calls.delete(id); admissions.delete(context); toolSet?.dispose(); }
     }
   };
 }

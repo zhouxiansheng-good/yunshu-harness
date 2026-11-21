@@ -825,7 +825,7 @@ export function buildLines(engineDir, { includeRuns = false } = {}) {
 
 /* ═══════════ DSH 遥控服务 ═══════════ */
 
-const PLUGIN_VERSION = '0.2.1-preview.8'
+const PLUGIN_VERSION = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')).version
 
 const json = z.custom(v => z.json().safeParse(v).success, { message: 'Invalid JSON' })
 

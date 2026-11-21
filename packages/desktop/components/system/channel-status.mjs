@@ -1,5 +1,9 @@
 const issue = (label,reason,action)=>({state:'unavailable',label,reason,action});
 const rules = [
+  [/input must be provided either through stdin|\bEPIPE\b|ERR_STREAM_DESTROYED/iu,'工单正文未送达','执行器没有读到完整的工单正文。','请检查客户端版本与输入通道。'],
+  [/claude-result-json-unavailable/iu,'Claude 回执无法读取','Claude Code 返回的内容无法解析为运行回执。','请核对客户端版本和输出格式。'],
+  [/INVALID_TOOL_OUTPUT|returned invalid output|not lossless(?:ly)? JSON/iu,'工具回执格式不符','桌面宿主无法读取该工具的结果。','请检查云舒和宿主的版本。'],
+  [/UNKNOWN_TOOL|unknown tool|TOOL_ACTIVATION_FAILED/iu,'会话未接入工具','当前会话没有接入所需工具。','请检查插件是否加载以及当前会话的工具权限。'],
   [/insufficient.quota|quota.exhaust|billing|credit balance|余额|足够额度|欠费|额度不足/iu,'额度不足','账户当前没有足够额度完成请求。','检查服务商余额或额度。'],
   [/\b429\b|rate.limit|too many requests|频率过高|限制了请求频率/iu,'请求过于频繁','渠道暂时限制了请求频率。','稍后重试，或调低并发。'],
   [/\b501\b|not implemented|unsupported.operation|没有实现请求的功能/iu,'接口不支持','当前服务没有实现请求的功能。','检查接入地址和所选功能。'],
@@ -28,4 +32,11 @@ export function workflowReason(error) {
   if(match)return match[2]+match[3];
   return /^[\u3400-\u9fffA-Za-z\s]*[\u3400-\u9fff]/u.test(message) && !/https?:|bearer|token=|api.key=|\b[45]\d\d\b|[\r\n]/iu.test(message)
     ? message.slice(0,220) : '执行器没有交回可确认的结果，请核对最近一次运行记录。';
+}
+
+export function toolFailure(result,fallback) {
+  const info=result?.error?.info;
+  const message=result?.error?.message || result?.content?.find(block=>block.type==='text')?.text;
+  if (info?.code && rules.some(([pattern])=>pattern.test(info.code))) return Error(workflowReason(info.code));
+  return Error(message?.replace(/^Error:\s*/u,'') || fallback);
 }
