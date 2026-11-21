@@ -1,5 +1,6 @@
 const issue = (label,reason,action)=>({state:'unavailable',label,reason,action});
 const rules = [
+  [/channel-not-selected/u,'未选择渠道','这个角色还没有选用渠道。','请在能力与渠道中添加并选用连接。'],
   [/input must be provided either through stdin|\bEPIPE\b|ERR_STREAM_DESTROYED/iu,'工单正文未送达','执行器没有读到完整的工单正文。','请检查客户端版本与输入通道。'],
   [/claude-result-json-unavailable/iu,'Claude 回执无法读取','Claude Code 返回的内容无法解析为运行回执。','请核对客户端版本和输出格式。'],
   [/INVALID_TOOL_OUTPUT|returned invalid output|not lossless(?:ly)? JSON/iu,'工具回执格式不符','桌面宿主无法读取该工具的结果。','请检查云舒和宿主的版本。'],

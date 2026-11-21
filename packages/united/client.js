@@ -151,11 +151,12 @@
       return ()=>{version.current++;};
     },[sessionId]);
     React.useEffect(()=>{
+      if(draft)return;
       const timer=setInterval(()=>{if(!pending.current)void read();},open?10000:30000);
       return ()=>clearInterval(timer);
-    },[sessionId,open]);
+    },[sessionId,open,Boolean(draft)]);
     async function save(payload){
-      if(pending.current || (!draft && payload.action!=='switch'))return;
+      if(pending.current || (!draft && !['switch','use-worker','switch-worker'].includes(payload.action)))return;
       pending.current=true;setBusy(true);setError('');++version.current;
       try{
         const result=await call(sessionId,'channel-edit',{...payload,revision:draft?.revision??data.revision,requestId:draft?.requestId??crypto.randomUUID()});
@@ -163,27 +164,42 @@
       }catch(e){setError(clientMessage(e));}
       finally{pending.current=false;setBusy(false);}
     }
-    const start=(kind,value={})=>{setDraft({kind,name:'',purpose:'',binding:'',moduleId:'image',...value,
-      revision:data.revision,requestId:crypto.randomUUID()});setError('');};
+    const start=(kind,value={})=>{setDraft({kind,name:'',purpose:'',binding:'',moduleId:'image',provider:'codex',mode:'local',auth:'key',model:'',executable:'',home:'',endpoint:'',apiKey:'',...value,
+      revision:data.revision,requestId:crypto.randomUUID(),moduleId:kind==='worker'?'agents':(value.moduleId??(kind==='module'?value.id:'image'))});setError('');};
     const change=(key,value)=>setDraft(x=>({...x,[key]:value,requestId:crypto.randomUUID()}));
     const button=(label,fn)=>h('button',{type:'button',disabled:busy,onClick:fn},label);
     const field=(label,node)=>h('label',{className:'ysu-directory-field'},label,node);
     const agents=data?.modules.find(m=>m.id==='agents');
     const head=agents?'协作成员 '+channelCounts(agents.counts):'正在读取协作成员';
+    const isWorker=draft?.kind==='worker';
+    const cancel=()=>{setDraft(null);setError('');};
     const form=draft&&h('form',{className:'ysu-directory-form',onSubmit:e=>{
       e.preventDefault();const {kind,requestId,revision,...v}=draft;void save({action:kind,...v});
     }},
-      h('strong',null,(draft.id?'编辑':'新增')+(draft.kind==='module'?'模块':'渠道')),
-      field('名称',h('input',{required:true,maxLength:draft.kind==='module'?40:48,value:draft.name,onChange:e=>change('name',e.target.value)})),
-      field(draft.kind==='module'?'用途':'负责内容',h('input',{required:true,maxLength:250,value:draft.purpose,onChange:e=>change('purpose',e.target.value)})),
+      h('strong',null,(draft.id||draft.originalId?'编辑':'新增')+(draft.kind==='module'?'模块':'渠道')),
+      isWorker&&field('执行器',h('select',{value:draft.provider,disabled:!!draft.id,onChange:e=>e.target.value==='extension'?start('channel',{moduleId:'agents'}):change('provider',e.target.value)},
+        h('option',{value:'codex'},'Codex · 执行'),h('option',{value:'claude'},'Claude Code · 规划与审核'),!draft.id&&h('option',{value:'extension'},'已安装的扩展接口'))),
+      field('名称',h('input',{autoFocus:true,required:true,maxLength:draft.kind==='module'?40:48,value:draft.name,onChange:e=>change('name',e.target.value)})),
+      !isWorker&&field(draft.kind==='module'?'用途':'负责内容',h('input',{required:true,maxLength:250,value:draft.purpose,onChange:e=>change('purpose',e.target.value)})),
+      isWorker&&h(React.Fragment,null,
+        field('连接方式',h('select',{value:draft.mode,onChange:e=>change('mode',e.target.value)},
+          h('option',{value:'local'},'使用本机客户端配置'),h('option',{value:'api'},'自定义 API'))),
+        draft.mode==='api'&&field('接口地址',h('input',{type:'url',required:true,value:draft.endpoint,onChange:e=>change('endpoint',e.target.value),
+          placeholder:draft.provider==='codex'?'Responses 接口根地址，通常以 /v1 结尾':'Anthropic Messages 服务根地址'})),
+        draft.mode==='api'&&draft.provider==='claude'&&field('认证方式',h('select',{value:draft.auth||'key',onChange:e=>change('auth',e.target.value)},h('option',{value:'key'},'API Key'),h('option',{value:'bearer'},'Bearer Token'))),
+        draft.mode==='api'&&field('API 密钥',h('input',{type:'password',autoComplete:'new-password',value:draft.apiKey,maxLength:2048,
+          placeholder:draft.hasKey?'已保存；留空沿用同一地址的密钥':'输入该服务的密钥',onChange:e=>change('apiKey',e.target.value)})),
+        field('模型',h('input',{required:draft.mode==='api',value:draft.model,placeholder:draft.mode==='api'?'填写服务商提供的模型 ID':'留空沿用客户端模型',onChange:e=>change('model',e.target.value)})),
+        draft.mode==='local'&&field('配置目录',h('input',{value:draft.home,placeholder:'留空沿用现有配置',onChange:e=>change('home',e.target.value)})),
+        field('客户端程序',h('input',{value:draft.executable,placeholder:'自动查找，或填写完整 .exe 路径',onChange:e=>change('executable',e.target.value)}))),
       draft.kind==='channel'&&h(React.Fragment,null,
         field('所属模块',h('select',{value:draft.moduleId,onChange:e=>change('moduleId',e.target.value)},
-          ...data.modules.filter(m=>m.id!=='extensions').map(m=>h('option',{key:m.id,value:m.id},m.name)))),
+          ...data.modules.filter(m=>m.id!=='extensions' || m.id===draft.moduleId).map(m=>h('option',{key:m.id,value:m.id},m.name)))),
         field('已安装的接口',h('select',{value:data.bindings.some(x=>x.id===draft.binding)?draft.binding:'',onChange:e=>change('binding',e.target.value)},
           h('option',{value:''},'待接入'),...data.bindings.map(x=>h('option',{key:x.id,value:x.id},x.name+' · '+x.id)))),
         !data.bindings.some(x=>x.id===draft.binding)&&field('扩展标识（可稍后填写）',h('input',{value:draft.binding||'',maxLength:81,placeholder:'例如 studio.images',onChange:e=>change('binding',e.target.value)}))),
-      h('div',{className:'sr-actions'},h('button',{type:'submit',disabled:busy},'保存'),button('取消',()=>setDraft(null)),
-        draft.id&&button('移除'+(draft.kind==='module'?'模块':'渠道'),()=>void save({action:'remove-'+draft.kind,id:draft.id}))));
+      h('div',{className:'sr-actions'},h('button',{type:'submit',disabled:busy},'保存'),button('取消',cancel),
+        (draft.id||draft.originalId)&&button(draft.confirmRemove?'确认移除':('移除'+(draft.kind==='module'?'模块':'渠道')),()=>draft.confirmRemove?void save({action:'remove-'+draft.kind,id:draft.id||draft.originalId}):change('confirmRemove',true))));
     return h('section',{className:'ysu-directory'},
       h('button',{className:'ysu-directory-heading',type:'button','aria-expanded':open,onClick:()=>{setOpen(!open);if(!open)void read();}},
         h('strong',null,'能力与渠道'),h('span',null,head),h('span',{'aria-hidden':true},open?'⌃':'⌄')),
@@ -191,17 +207,22 @@
         ...data.modules.map(m=>h('section',{key:m.id,className:'ysu-directory-group'},
           h('div',{className:'ysu-directory-line'},h('strong',null,m.name),h('small',null,channelCounts(m.counts))),
           m.custom&&h('p',null,m.purpose),
+          draft&&(draft.moduleId===m.id || isWorker&&m.id==='agents' || draft.kind==='module'&&draft.id===m.id)&&!(draft.kind==='module'&&!draft.id)&&form,
           ...m.channels.map(ch=>h('div',{className:'ysu-directory-channel',key:ch.id},
-            h('div',{className:'ysu-directory-line'},h('b',null,ch.name),h('span',{'data-state':ch.state},ch.label)),
+            h('div',{className:'ysu-directory-line'},h('b',null,ch.name,ch.provider&&ch.active?' · 当前选用':''),h('span',{'data-state':ch.state},ch.label)),
             h('div',null,ch.purpose),h('small',null,[ch.reason,ch.action].filter(Boolean).join(' ')),
             ch.lastObservedAt&&h('small',null,'最近调用　'+new Date(ch.lastObservedAt).toLocaleString()),
-            h('div',{className:'sr-actions'},ch.tool&&button(ch.enabled?'关闭渠道':'开启渠道',()=>void save({action:'switch',id:'ext.'+ch.binding,value:!ch.enabled})),
-              ch.manual&&button('编辑渠道',()=>start('channel',{id:ch.id,name:ch.name,purpose:ch.purpose,moduleId:m.id,binding:ch.binding||''}))))),
+            h('div',{className:'sr-actions'},ch.settings&&button('设置',()=>start('worker',ch.settings)),
+              ch.settings&&button(ch.enabled?'停用':'启用',()=>void save({action:'switch-worker',id:ch.id,value:!ch.enabled})),
+              ch.settings&&!ch.active&&ch.enabled&&button('选用',()=>void save({action:'use-worker',id:ch.id})),
+              ch.tool&&button(ch.enabled?'关闭渠道':'开启渠道',()=>void save({action:'switch',id:'ext.'+ch.binding,value:!ch.enabled})),
+              (ch.manual||ch.tool)&&button('设置',()=>start('channel',{id:ch.manual?ch.id:undefined,originalId:ch.id,name:ch.name,purpose:ch.purpose,moduleId:m.id,binding:ch.binding||''}))))),
           !m.channels.length&&h('small',null,'尚未接入渠道。'),
-          h('div',{className:'sr-actions'},m.id!=='extensions'&&button('添加渠道',()=>start('channel',{moduleId:m.id})),
+          h('div',{className:'sr-actions'},m.id!=='extensions'&&button('添加渠道',()=>start(m.id==='agents'?'worker':'channel',{moduleId:m.id})),
             m.id!=='agents' && m.id!=='extensions' && button(m.enabled?'关闭模块':'开启模块',()=>void save({action:'switch',id:m.id,value:!m.enabled})),
             m.custom&&button('编辑模块',()=>start('module',{id:m.id,name:m.name,purpose:m.purpose}))))),
-        form||h('div',{className:'sr-actions'},button('新建模块',()=>start('module')),button('刷新状态',()=>void read(true)))),
+        !draft&&h('div',{className:'sr-actions'},button('新建模块',()=>start('module')),button('刷新状态',()=>void read(true)))),
+      draft?.kind==='module'&&!draft.id&&form,
       error&&h('div',{role:'alert'},error,' ',button('刷新',()=>{setDraft(null);void read(true);})));
   }
 

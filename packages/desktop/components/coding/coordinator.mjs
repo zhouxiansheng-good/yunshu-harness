@@ -237,7 +237,28 @@ function summary(record, mode = record.recoveryMode ?? 'observe') {
   };
 }
 
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { bindings } from '../system/worker-profiles.mjs';
 export class CodingCoordinator {
+  #connection=new AsyncLocalStorage();
+  get peer(){return this.#connection.getStore()?.peer??this.basePeer;}
+  get claude(){return this.#connection.getStore()?.claude??this.baseClaude;}
+  withConnections(fn){
+    if(!this.directory || this.#connection.getStore() || this.#dispatchProfile!=='standard'||this.#initialLoopback||this.#wire)return fn();
+    return this.#connection.run(bindings(this.directory,this.basePeer,this.baseClaude),fn);
+  }
+  routeFor(provider){return this.#connection.getStore()?.routes[provider];}
+  providerCheck(provider,probe){
+    const row=this.routeFor(provider);
+    const cfg=provider==='codex'?this.peer.config:this.claude;
+    if(row!==undefined && !row?.enabled)return {available:false,executable:null,ready:false,reason:row?'channel-disabled':'channel-not-selected'};
+    const cli=provider==='codex'?this.locate(cfg):this.claudeLocate(cfg);
+    const available=cli.available && (!row?.executable || resolve(cli.path)===resolve(row.executable));
+    const auth=probe && available?(cfg.channelRef?{ready:true,reason:'relay-configured-unverified'}:
+      provider==='codex'?this.authProbe(cli.path,{codexHome:cfg.codexHome}):this.claudeProbe(cfg.home,cli.path)):null;
+    return {available,executable:available?cli.path:null,ready:auth?.ready??false,
+      reason:!available?'cli-not-found':auth?.reason??'cli-found; auth-not-probed'};
+  }
   // Operator configuration, never a ticket/tool argument. The ordinary writer has no
   // attested filesystem role. A blind trial must not fall through to that transport.
   #dispatchProfile;
@@ -306,11 +327,19 @@ export class CodingCoordinator {
     if (claudeMaxBudgetUsd !== null && (typeof claudeMaxBudgetUsd !== 'number' || !Number.isFinite(claudeMaxBudgetUsd)
       || claudeMaxBudgetUsd <= 0))
       throw new TypeError('claudeMaxBudgetUsd must be a positive finite number');
-    this.claude = { path: options.claudePath ?? '', claudePath: options.claudePath ?? '', home: claudeHome(options.claudeHome),
+    this.baseClaude = { path: options.claudePath ?? '', claudePath: options.claudePath ?? '', home: claudeHome(options.claudeHome),
       model: options.claudeModel ?? '', maxBudgetUsd: claudeMaxBudgetUsd,
       runTimeoutMs: options.runTimeoutMs ?? 900000 };
     this.claudeLocate = options.claudeLocate ?? locateClaude;
-    this.claudeProbe = options.claudeProbe ?? probeClaudeRelay;
+    this.claudeProbe = options.claudeProbe ?? ((home,executable)=>{
+      const relay=probeClaudeRelay(home);
+      if(relay.ready || !['relay-provider-not-configured','relay-settings-unavailable'].includes(relay.reason))return relay;
+      try{
+        const reply=spawnSync(executable,['auth','status','--json'],{env:{...process.env,CLAUDE_CONFIG_DIR:home},encoding:'utf8',windowsHide:true,timeout:4000});
+        if(reply.status===0 && JSON.parse(reply.stdout).loggedIn===true)return {ready:true,reason:'client-authenticated'};
+      }catch{}
+      return relay;
+    });
     this.claudeRunner = options.claudeRunner ?? runClaudeRequest;
     this.checkTimeoutMs = positiveInteger(options.checkTimeoutMs ?? 120000, 'checkTimeoutMs');
     this.recoveryMode = options.recoveryMode ?? 'observe';
@@ -327,7 +356,7 @@ export class CodingCoordinator {
     this.diagnosisOptions = options.diagnosisOptions ? structuredClone(options.diagnosisOptions) : {};
     this.freshSettingsFile = options.freshSettingsFile ?? null;
     this.freshOptions = structuredClone(options.freshOptions ?? {});
-    this.peer = {
+    this.basePeer = {
       config: {
         codexPath: options.codexPath ?? '',
         codexHome: resolve(options.codexHome || process.env.CODEX_HOME || join(homedir(), '.codex')),
@@ -341,7 +370,8 @@ export class CodingCoordinator {
     };
   }
 
-  status(probe = true) {
+  status(probe = true) { return this.withConnections(()=>this.connectionStatus(probe)); }
+  connectionStatus(probe) {
     if (this.#dispatchProfile === 'blind-trial') {
       const held = this.#blindHold(null);
       // Being stopped by policy says nothing about installation or account readiness.
@@ -351,24 +381,10 @@ export class CodingCoordinator {
           deepseek: { available: false, reason: 'coding-session-adapter-not-integrated' } },
         activeTickets: [...this.busy.keys()], unitedConfigured: Boolean(this.united) };
     }
-    const codex = this.locate(this.peer.config);
-    const login = probe && codex.available
-      ? this.authProbe(codex.path, { codexHome: this.peer.config.codexHome }) : null;
-    const claude = this.claudeLocate(this.claude);
-    const claudeAuth = probe && claude.available ? this.claudeProbe(this.claude.home) : null;
-    return {
-      enabled: this.enabled,
-      providers: {
-        codex: { available: codex.available, executable: codex.path ?? null,
-          authMode: this.authMode,
-          ready: login?.ready ?? false,
-          reason: !codex.available ? 'cli-not-found' : login?.reason ?? 'cli-found; auth-not-probed' },
-        deepseek: { available: false, reason: 'coding-session-adapter-not-integrated' },
-        claude: { available: claude.available, executable: claude.path,
-          authMode: 'relay', ready: claudeAuth?.ready ?? false,
-          reason: !claude.available ? 'cli-not-found' : claudeAuth?.reason ?? 'cli-found; auth-not-probed',
-          cliBudgetUsd: this.claude.maxBudgetUsd },
-      },
+    return {enabled:this.enabled,providers:{
+        codex:{...this.providerCheck('codex',probe),authMode:this.peer.config.channelRef?'api':this.authMode},
+        deepseek:{available:false,reason:'coding-session-adapter-not-integrated'},
+        claude:{...this.providerCheck('claude',probe),authMode:this.claude.channelRef?'api':'relay',cliBudgetUsd:this.claude.maxBudgetUsd}},
       activeTickets: [...this.busy.keys()], unitedConfigured: Boolean(this.united),
       maxRunsPerTicket: this.maxRunsPerTicket,
       recovery: { ...PROGRESS_CAPABILITIES, mode: this.recoveryMode },
@@ -783,7 +799,8 @@ export class CodingCoordinator {
       return await rankStep(this,this.#initialLoopback,id,op,save,signal);
     } catch(e){return {ticketId:id,[flag]:false,reason:e.message};} finally {release();}
   }
-  async dispatch(args, exec = {}) {
+  async dispatch(args, exec = {}) { return this.withConnections(()=>this.dispatchBound(args,exec)); }
+  async dispatchBound(args,exec) {
     exec.signal?.throwIfAborted();
     if (this.#dispatchProfile === 'blind-trial') return { accepted: false, ...this.#blindHold(args?.ticketId) };
     if(this.#rankDelivery){
@@ -812,13 +829,9 @@ export class CodingCoordinator {
       try { if(fresh || !this.#handoff)throw Error('handoff-host-required');handoff.admit(this,this.#handoff,args); }
       catch(e){return {accepted:false,ticketId:args.ticketId,reason:e.message};}
     }
-    const located = fresh || this.#wire ? {available:true,path:process.execPath}
-      : provider === 'codex' ? this.locate(this.peer.config) : this.claudeLocate(this.claude);
-    if (!located.available) return { accepted: false, provider, reason: provider + '-cli-not-found' };
-    const auth = fresh || this.#wire ? {ready:true} : provider === 'codex'
-      ? this.authProbe(located.path, { codexHome: this.peer.config.codexHome })
-      : this.claudeProbe(this.claude.home);
-    if (!auth.ready) return { accepted: false, provider, reason: provider + '-' + auth.reason };
+    const check=fresh || this.#wire?{available:true,ready:true,executable:process.execPath}:this.providerCheck(provider,true);
+    if(!check.ready)return {accepted:false,provider,reason:provider+'-'+check.reason};
+    const located={available:true,path:check.executable};
     const ticketId = requiredText(args.ticketId, 'ticketId', 80);
     this.ticketPath(ticketId);
     if (this.busy.has(ticketId)) return { accepted: false, ticketId, reason: 'ticket-already-running' };

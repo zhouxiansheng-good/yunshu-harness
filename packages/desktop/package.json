@@ -1,6 +1,6 @@
 {
   "name": "@yunshu/dsh-desktop",
-  "version": "0.6.12-preview.29",
+  "version": "0.6.12-preview.30",
   "description": "云舒：记忆、人格与语音",
   "author": "云舒",
   "type": "module",
@@ -83,5 +83,5 @@
       "optional": true
     }
   },
-  "yunshuRelease": "avalon-r41"
+  "yunshuRelease": "avalon-r42"
 }

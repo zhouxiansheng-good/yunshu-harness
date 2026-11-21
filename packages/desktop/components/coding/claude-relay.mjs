@@ -34,12 +34,13 @@ export function probeClaudeRelay(home) {
   try { settings = JSON.parse(readFileSync(join(home, 'settings.json'), 'utf8')); }
   catch { return { ready: false, reason: 'relay-settings-unavailable' }; }
   const env = settings?.env;
-  if (!env || typeof env !== 'object')
+  if (!env || typeof env !== 'object' || !env.ANTHROPIC_BASE_URL)
     return { ready: false, reason: 'relay-provider-not-configured' };
   let endpoint;
   try { endpoint = new URL(env.ANTHROPIC_BASE_URL); }
   catch { return { ready: false, reason: 'relay-endpoint-invalid' }; }
-  if (endpoint.protocol !== 'https:' || !endpoint.hostname || endpoint.username || endpoint.password
+  const local=endpoint.protocol==='http:' && ['127.0.0.1','localhost','[::1]'].includes(endpoint.hostname);
+  if ((!local && endpoint.protocol !== 'https:') || !endpoint.hostname || endpoint.username || endpoint.password
     || endpoint.search || endpoint.hash)
     return { ready: false, reason: 'relay-endpoint-invalid' };
   const credential = env.ANTHROPIC_AUTH_TOKEN || env.ANTHROPIC_API_KEY;

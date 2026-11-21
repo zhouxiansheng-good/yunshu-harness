@@ -5,6 +5,7 @@ import { dshHomePath } from '@deepseek-ai/dsh-home-paths';
 import { enabled } from './policy.mjs';
 import { channelIssue } from './channel-status.mjs';
 
+import { profiles,selected as selectedWorker,settings,editWorkers,workerRoles } from './worker-profiles.mjs';
 const defaults=[
   {id:'agents',name:'协作成员',purpose:'建单、规划、执行与审核'},
   {id:'image',name:'图像生成',purpose:'生成图像'},
@@ -30,7 +31,7 @@ export class ChannelDirectory {
   config(){return read(this.file,{revision:0,modules:[],channels:[]});}
   permits(ext){
     const c=this.config(),ch=c.channels.find(x=>x.binding===ext.id);
-    return c.switches?.[ch?.moduleId??ext.moduleId]!==false && c.switches?.['ext.'+ext.id]!==false;
+    return !(c.removedBindings??[]).includes(ext.id) && c.switches?.[ch?.moduleId??ext.moduleId]!==false && c.switches?.['ext.'+ext.id]!==false;
   }
   edit(p) {
     mkdirSync(this.root,{recursive:true});
@@ -46,8 +47,9 @@ export class ChannelDirectory {
       const c=this.config();
       if(p.requestId && c.lastRequest===p.requestId)return {revision:c.revision};
       need(p.revision===c.revision,'模块列表已更新，请刷新后重试。');
-      const modules=[...defaults,...c.modules];
-      if(p.action==='module'){
+      const modules=[...defaults,...c.modules,{id:'extensions',name:'其他扩展'}];
+      if(['worker','use-worker','switch-worker','remove-worker'].includes(p.action)){editWorkers(c,p);this.probe=null;}
+      else if(p.action==='module'){
         need(text(p.name,40) && text(p.purpose,250),'请填写模块名称和用途。');
         const name=p.name.trim();
         need(!modules.some(m=>m.name===name && m.id!==p.id),'已有同名模块。');
@@ -59,13 +61,18 @@ export class ChannelDirectory {
         need(!p.binding || key.test(p.binding),'扩展标识无效。');
         const value={id:p.id??'channel-'+randomUUID(),moduleId:p.moduleId,name:p.name.trim(),purpose:p.purpose.trim(),binding:p.binding||null};
         need(!c.channels.some(ch=>ch.id!==p.id && (ch.moduleId===p.moduleId && ch.name===value.name || value.binding && ch.binding===value.binding)),'该渠道名称或扩展已被使用。');
+        const former=c.channels.find(x=>x.id===p.id)?.binding;
+        if(former && former!==value.binding)c.removedBindings=[...new Set([...(c.removedBindings??[]),former])];
+        if(value.binding)c.removedBindings=(c.removedBindings??[]).filter(id=>id!==value.binding);
         if(p.id){const old=c.channels.find(x=>x.id===p.id);need(old,'渠道已经移除。');Object.assign(old,value);}
         else c.channels.push(value);
       } else if(p.action==='switch'){
         need(typeof p.value==='boolean' && (modules.some(m=>m.id===p.id && m.id!=='agents') || /^ext\.[a-z][a-z0-9._-]{1,80}$/u.test(p.id)),'请选择已登记的模块或扩展。');
         c.switches={...c.switches,[p.id]:p.value};
       } else if(p.action==='remove-channel'){
-        need(c.channels.some(x=>x.id===p.id),'渠道不存在。');
+        const former=c.channels.find(x=>x.id===p.id),binding=former?.binding??(p.id?.startsWith('ext.')?p.id.slice(4):null);
+        need(former || binding&&key.test(binding),'渠道不存在。');
+        if(binding)c.removedBindings=[...new Set([...(c.removedBindings??[]),binding])];
         c.channels=c.channels.filter(x=>x.id!==p.id);
       } else if(p.action==='remove-module'){
         need(c.modules.some(x=>x.id===p.id) && !c.channels.some(x=>x.moduleId===p.id),'请先移走模块中的渠道。');
@@ -100,9 +107,10 @@ export class ChannelDirectory {
       info=receipt.issue??short('available','可用','最近一次调用成功。');
     return {...info,lastObservedAt:receipt?.at??null};
   }
-  snapshot(agent,control,refresh=false) {
+  snapshot(agent,control,refresh=false,owner=false) {
     const config=this.config(), entries=control.catalog();
     const modules=[...defaults,...config.modules].map(x=>({...x,enabled:config.switches?.[x.id]!==false,custom:config.modules.some(m=>m.id===x.id),channels:[]}));
+    if(config.channels.some(row=>row.moduleId==='extensions'))modules.push({id:'extensions',name:'其他扩展',custom:false,enabled:true,channels:[]});
     const byId=new Map(modules.map(m=>[m.id,m]));
     const append=(moduleId,row)=>byId.get(moduleId).channels.push(row);
     const selection=agent?.model?.current?.(), selected=selection?.model;
@@ -137,12 +145,16 @@ export class ChannelDirectory {
     else if(host.state==='available' && agent?.status==='running')host=short('busy','工作中','正在处理当前会话。');
     append('agents',{id:'deepseek',name:'DeepSeek · 主聊天',purpose:'澄清、建单、派单、退回重建和最终汇报',...host});
     const coding=enabled('coding') && control.codingConfigured,transport=control.taskWorkers;
-    if((refresh || !this.probe || Date.now()-this.probe.at>60000) && coding && transport)
-      this.probe={at:Date.now(),providers:transport.status().providers};
-    for(const [id,name,purpose] of [['codex','GPT · Codex','按规划执行任务，交回作品和文件'],['claude','Claude Code','前期规划，独立核验 GPT 的交付并给出整改意见']]){
-      const provider=this.probe?.providers?.[id];
-      const base=!coding?off():!transport?disconnected():provider?.ready?configured():channelIssue(provider?.reason);
-      append('agents',{id,name,purpose,...this.health(id,base)});
+    if((refresh || this.probe?.revision!==config.revision || Date.now()-this.probe.at>60000) && coding && transport)
+      this.probe={at:Date.now(),revision:config.revision,providers:transport.status().providers};
+    for(const row of profiles(config)){
+      const active=selectedWorker(config,row.provider)?.id===row.id;
+      const provider=this.probe?.providers?.[row.provider];
+      const base=!coding||!row.enabled?off():!active?short('unverified','备用','选择后用于下一道工序。'):
+        !transport?disconnected():provider?.ready?configured():channelIssue(provider?.reason);
+      append('agents',{id:row.id,provider:row.provider,name:row.name,purpose:workerRoles[row.provider][1],active,enabled:row.enabled,
+        ...(owner?{settings:settings(row)}:{}),...this.health(row.stamp,base),
+        ...(!active&&row.enabled&&coding?base:{})});
     }
     const installed=new Map(entries.map(x=>[x.id,x]));
     const placed=new Set();
@@ -152,7 +164,7 @@ export class ChannelDirectory {
       append(moduleId,{...ch,manual,binding:ch.binding??ext?.id??null,tool:ext?.tool??null,enabled:ext?config.switches?.['ext.'+ext.id]!==false:null,...(ext?this.health('ext.'+ext.id,base):base)});
     };
     for(const ch of config.channels)if(byId.has(ch.moduleId))place(ch.moduleId,ch,installed.get(ch.binding),true);
-    for(const ext of entries)if(!placed.has(ext.id)){
+    for(const ext of entries)if(!placed.has(ext.id) && !(config.removedBindings??[]).includes(ext.id)){
       const group=byId.has(ext.moduleId)?ext.moduleId:'extensions';
       if(!byId.has(group)){
         const other={id:group,name:'其他扩展',purpose:'已注册的其他能力',channels:[],custom:false};

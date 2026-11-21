@@ -16,6 +16,7 @@
  *
  * @module dsh-codex-peer/execute
  */
+import { connectionEnv } from '../../../../system/worker-profiles.mjs';
 import { createProgressLog } from './events.js'
 import { describeOutcome, executeRun, planRun } from './runner.js'
 
@@ -47,6 +48,7 @@ export function descriptionFor(outcome) {
  *   timeout and now runs as a job), or `background` (returned immediately).
  */
 export async function runPeerRequest(peer, request, exec) {
+  const channelEnv=await connectionEnv(peer.config,exec?.signal);
   const plan = planRun(peer, request, exec)
   const progress = createProgressLog({ maxLines: peer.config.progressKeepLines })
   const jobs = peer.jobs
@@ -85,7 +87,7 @@ export async function runPeerRequest(peer, request, exec) {
         'background Codex runs need the job service, which is not loaded in this profile: enable @deepseek-ai/dsh-tool-jobs (the dsh-base bundle loads it) or call again without background: true',
       )
     }
-    const outcome = await executeRun(peer, plan, { signal: exec?.signal, progress })
+    const outcome = await executeRun(peer, plan, { signal: exec?.signal, progress,channelEnv })
     charge(outcome)
     return { kind: 'run', plan, outcome, progress }
   }
@@ -111,7 +113,7 @@ export async function runPeerRequest(peer, request, exec) {
         try {
           const settled = await executeRun(peer, plan, {
             signal: controller.signal,
-            progress,
+            progress,channelEnv,
             onSpawn: (info) => {
               spawnInfo = info
             },

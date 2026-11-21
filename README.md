@@ -13,6 +13,10 @@
 
 完整包包含离线记忆向量模型、中文语音识别模型、桌面插件和联合体。安装目录需要额外空间存储本地模型和插件缓存。Codex、Claude Code 与其他外部执行器需要各自的可用安装与授权。音乐按钮播放云舒的原创配乐《湖畔夜曲》。
 
+## 渠道设置
+
+打开「云舒 → 任务台 → 能力与渠道」，点 Codex 或 Claude Code 旁的「设置」，也可用「添加渠道」为同一角色保存另一套连接。选择「使用本机客户端配置」可指定客户端、配置目录和模型；选择「自定义 API」可填写接口根地址、模型和密钥。Codex 使用 Responses 接口，Claude Code 使用 Messages 接口。密钥由 Windows 当前用户加密保存。点「选用」后用于该角色的后续工序。停用或移除当前渠道会让该角色等待重新配置。编辑中点「取消」可放弃草稿。
+
 ## 日常使用
 
 | 想做什么 | 操作 |
@@ -41,6 +45,6 @@
 python scripts/build.py
 ```
 
-生成文件为 `dist/Yunshu-R41-Windows-x64.zip`。已有模型时可传 `--bge-model` 和 `--speech-models` 进行离线构建。使用 `Install-Yunshu.ps1 -Action Check` 可在安装前验证宿主、两个插件包和语音模型。卸载使用 `Install-Yunshu.ps1 -Action Remove`，卸载后可继续使用原有 Harness 会话。
+生成文件为 `dist/Yunshu-R42-Windows-x64.zip`。已有模型时可传 `--bge-model` 和 `--speech-models` 进行离线构建。使用 `Install-Yunshu.ps1 -Action Check` 可在安装前验证宿主、两个插件包和语音模型。卸载使用 `Install-Yunshu.ps1 -Action Remove`，卸载后可继续使用原有 Harness 会话。
 
 云舒自有代码以 MIT 许可证开放。模型、语音工具及其他第三方组件的来源和许可见 [第三方说明](THIRD_PARTY_NOTICES.md)。

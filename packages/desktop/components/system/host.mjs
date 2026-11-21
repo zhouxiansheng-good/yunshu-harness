@@ -1,3 +1,4 @@
+import { prepareWorker } from './worker-profiles.mjs';
 import { registerTaskPlan } from './task-tool.mjs';
 import { z } from 'zod';
 import { TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol';
@@ -97,9 +98,9 @@ export default class YunshuControl extends TypertRemoteService {
   }
   enabled(key) { return enabled(key); }
   explain(error) { return workflowReason(error); }
-  editDirectory(payload,signal) {
+  async editDirectory(payload,signal) {
     requireOwner(this.ctx,signal);
-    const result=this.directory.edit(payload);this.extensions.refresh();return result;
+    const result=this.directory.edit(await prepareWorker(payload,signal));this.extensions.refresh();return result;
   }
   registerCapability(owner,spec) {return this.extensions.register(owner,spec);}
   catalog() {return this.extensions.list();}

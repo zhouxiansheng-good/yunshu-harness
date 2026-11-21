@@ -1,4 +1,5 @@
 /** Claude Code CLI transport. It reuses user relay settings and never handles the token itself. */
+import { connectionEnv } from '../system/worker-profiles.mjs';
 import { execFile } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { promisify } from 'node:util';
@@ -52,7 +53,7 @@ export async function runClaudeRequest(config, request, context = {}) {
   let stdout, exitCode = 0;
   try {
     const running = execFileAsync(config.path, args, {
-      cwd: request.cwd, env: { ...process.env, CLAUDE_CONFIG_DIR: config.home },
+      cwd: request.cwd, env: { ...process.env, ...await connectionEnv(config,context.signal), CLAUDE_CONFIG_DIR: config.home },
       windowsHide: true, signal: context.signal, timeout: config.runTimeoutMs,
       maxBuffer: 4 * 1024 * 1024,
     });

@@ -944,8 +944,8 @@ export default class YunshuUnited extends TypertRemoteService {
     if (action==='channels' || action==='channel-edit') {
       const control=this.ctx.get('yunshuControl');
       if (!control?.directory) throw Error('云舒能力目录未连接。');
-      if (action==='channel-edit') control.editDirectory(payload,signal);
-      return control.directory.snapshot(agent,control,payload.refresh===true);
+      if (action==='channel-edit') await control.editDirectory(payload,signal);
+      return control.directory.snapshot(agent,control,payload.refresh===true,this.ctx.invocation?.peer?.principal?.kind==='owner');
     }
     if (action === 'engine') {
       const e = this.engine()

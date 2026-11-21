@@ -15,9 +15,10 @@ export default class YunshuCodingTools {
   constructor(ctx, config = {}) {
     this.coordinator = new CodingCoordinator(config);
     const control = ctx.get('yunshuControl');
+    this.coordinator.directory=control.directory;
     const transport = installRoleTransport(ctx,this.coordinator);
     const workers={...transport,explain:e=>control.explain(e),run:(agent,stage,task,signal)=>
-      control.directory.observe(stage==='execute'?'codex':'claude',()=>transport.run(agent,stage,task,signal))};
+      this.coordinator.withConnections(()=>{const role=stage==='execute'?'codex':'claude';return control.directory.observe(this.coordinator.routeFor(role)?.stamp??role,()=>transport.run(agent,stage,task,signal));})};
     control.taskWorkers = workers;
     ctx.effect(()=>()=>{ if (control.taskWorkers===workers) control.taskWorkers=null; });
     featureTool(ctx,defineTool({

@@ -66,6 +66,7 @@ export function probeRelay(codexHome) {
   if (!supportedTransport || !endpoint.hostname || endpoint.username || endpoint.password
     || endpoint.search || endpoint.hash)
     return { ready: false, reason: 'relay-endpoint-invalid' };
+  if (typeof config.env_key === 'string' && /^[A-Za-z_][A-Za-z0-9_]*$/u.test(config.env_key) && process.env[config.env_key]?.trim())return {ready:true,reason:'relay-configured-unverified',provider:provider.name};
   if (typeof config.experimental_bearer_token !== 'string'
     || !config.experimental_bearer_token.trim())
     return { ready: false, reason: 'relay-credential-unavailable' };
